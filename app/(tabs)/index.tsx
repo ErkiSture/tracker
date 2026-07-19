@@ -1,27 +1,17 @@
 import DailyForm from "@/features/daily-entry/components/DailyForm";
-import { StyleSheet, View } from "react-native";
+import { useTheme } from "@/shared/contexts/themeContext";
+import { createCommonStyles } from "@/shared/styles/common";
+import { View } from "react-native";
 
 export default function Index() {
+
+  const { theme } = useTheme();
+    
+  const styles = createCommonStyles(theme);
+
   return (
-    <View style={styles.container}>
+    <View style={styles.screenContainer}>
       <DailyForm />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#25292e',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: '#fff',
-  },
-  button: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
-    color: '#fff',
-  },
-});

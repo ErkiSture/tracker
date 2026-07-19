@@ -1,10 +1,15 @@
+import { useTheme } from "@/shared/contexts/themeContext";
+import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, Text } from "react-native";
 import { useDailyEntry } from "../hooks/useDailyEntry";
 import { useEntries } from "../hooks/useEntries";
 import RatingInput from "./RatingInput";
 
 export default function DailyForm() {
+  const { theme } = useTheme();
+  const styles = createCommonStyles(theme);
+
   const [mood, setMood] = useState<number>(5);
   const [energy, setEnergy] = useState<number>(5);
   const [productivity, setProductivity] = useState<number>(5);
@@ -23,25 +28,12 @@ export default function DailyForm() {
       <RatingInput label="Mood" value={mood} onChange={setMood} />
       <RatingInput label="Energy" value={energy} onChange={setEnergy} />
       <RatingInput label="Productivity" value={productivity} onChange={setProductivity} />
-      <Pressable style={styles.saveButton} onPress={handleSubmit}>
+      <Pressable style={styles.button} onPress={handleSubmit}>
         <Text>Save</Text>
       </Pressable>
-      <Pressable style={styles.saveButton} onPress={getAllEntries}>
+      <Pressable style={styles.button} onPress={getAllEntries}>
         <Text>log all</Text>
       </Pressable>
-
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  text: {
-    color: '#fff',
-  },
-  saveButton: {
-    backgroundColor: '#ffd33d',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
-  }
-})
