@@ -2,5 +2,5 @@ export type Entry = {
   mood: number;
   energy: number;
   productivity: number;
-  comment: string;
+  comment: string | null;
 }
