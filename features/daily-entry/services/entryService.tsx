@@ -2,7 +2,7 @@ import * as entryStorage from "../storage/entryRepository";
 import { Entry } from "../types/entry";
 
 export async function saveEntry(entry: Entry) {
-  // Perform any necessary validation or transformation of the entry data here
+  // TODO: Perform any necessary validation or transformation of the entry data here
   await entryStorage.saveEntry(entry);
 }
 

@@ -9,6 +9,7 @@ export default function setUpDatabase() {
       mood INTEGER,
       energy INTEGER,
       productivity INTEGER,
+      comment TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `);

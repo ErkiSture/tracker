@@ -1,6 +1,6 @@
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Button, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 export default function Settings() {
   const { theme, changeTheme } = useTheme();
@@ -8,20 +8,26 @@ export default function Settings() {
 
   return (
     <View style={commonStyles.screenContainer}>
-      <Button
-        title="Light"
+      <Pressable
+        style={commonStyles.button}
         onPress={() => changeTheme("light")}
-      />
+      >
+        <Text style={commonStyles.buttonText}>Light</Text>
+      </Pressable>
 
-      <Button
-        title="Dark"
+      <Pressable
+        style={commonStyles.button}
         onPress={() => changeTheme("dark")}
-      />
+      >
+        <Text style={commonStyles.buttonText}>Dark</Text>
+      </Pressable>
 
-      <Button
-        title="System"
+      <Pressable
+        style={commonStyles.button}
         onPress={() => changeTheme("system")}
-      />
+      >
+        <Text style={commonStyles.buttonText}>System</Text>
+      </Pressable>
     </View>
   );
 }

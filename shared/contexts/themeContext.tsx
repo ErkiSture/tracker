@@ -20,6 +20,8 @@ const ThemeContext = createContext<ThemeContextType>({
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemTheme = useColorScheme();
   
+  // Default to system theme so new users follow their device settings.
+  // User preference overrides this after they choose a theme.
   const [preference, setPreference] = useState<ThemePreference>("system");
 
   useEffect(() => {
@@ -39,14 +41,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     await AsyncStorage.setItem("theme", newTheme);
   }
 
+  // Determine the actual theme to use based on user preference and system settings
   let isDark;
-
   if (preference === "system") {
     isDark = systemTheme === "dark";
   } else {
     isDark = preference === "dark";
   } 
-
+  
   const theme = isDark ? darkTheme : lightTheme;
 
   return (
