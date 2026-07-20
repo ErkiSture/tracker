@@ -1,4 +1,4 @@
-import * as entryStorage from "../storage/entryStorage";
+import * as entryStorage from "../storage/entryRepository";
 import { Entry } from "../types/entry";
 
 export async function saveEntry(entry: Entry) {

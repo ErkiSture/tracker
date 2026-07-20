@@ -29,10 +29,10 @@ export default function DailyForm() {
       <RatingInput label="Energy" value={energy} onChange={setEnergy} />
       <RatingInput label="Productivity" value={productivity} onChange={setProductivity} />
       <Pressable style={styles.button} onPress={handleSubmit}>
-        <Text>Save</Text>
+        <Text style={styles.text}>Save</Text>
       </Pressable>
       <Pressable style={styles.button} onPress={getAllEntries}>
-        <Text>log all</Text>
+        <Text style={styles.text}>log all</Text>
       </Pressable>
     </>
   );
