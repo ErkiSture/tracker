@@ -1,5 +1,5 @@
+import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { useTheme } from "@react-navigation/native";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = {
@@ -13,12 +13,12 @@ export default function RatingInput({
   value,
   onChange,
 }: Props) {
-  const theme = useTheme();
+  const { theme } = useTheme();
   const commonStyles = createCommonStyles(theme);
 
   return (
     <View>
-      <Text>{label}: {value}/10</Text>
+      <Text style={commonStyles.text}>{label}: {value}/10</Text>
       <View style={styles.row}>
         {Array.from({ length: 10 }, (_, i) => i + 1).map((number) => (
           <Pressable
@@ -26,10 +26,11 @@ export default function RatingInput({
             onPress={() => onChange(number)}
             style={[
               styles.number,
-              value === number && styles.selected,
+              { borderColor: theme.colors.border },
+              value === number && { backgroundColor: theme.colors.primary },
             ]}
           >
-            <Text>{number}</Text>
+            <Text style={commonStyles.text}>{number}</Text>
           </Pressable>
         ))}
       </View>
@@ -52,7 +53,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
   },
-
   selected: {
     backgroundColor: "black",
   },
