@@ -1,6 +1,8 @@
 import * as entryStorage from "../storage/entryRepository";
+import { getEntryByDate } from "../storage/entryRepository";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
+import getTodayDateFormatted from "../util/getTodayDateFormatted";
 
 export async function saveEntry(entry: CreateEntry) {  
   if (entry.mood < 1 || entry.mood > 10) {
@@ -22,6 +24,15 @@ export async function saveEntry(entry: CreateEntry) {
   // Convert empty comment to null before saving
   const raw = (entry.comment ?? "").trim();
   const comment = raw === "" ? null : raw;
+
+  // Only let one entry per day exist
+  const currentDate = getTodayDateFormatted()
+  const entryExists = await getEntryByDate(currentDate);
+
+  if (entryExists) {
+    console.log(3424234)
+    throw new Error("An entry already exists for today");
+  }
 
   const entryToSave: CreateEntry = {
     ...entry,

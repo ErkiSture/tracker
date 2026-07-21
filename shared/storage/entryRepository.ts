@@ -25,3 +25,16 @@ export async function getMonthEntries(month: number): Promise<Entry[]>{
   const result = await db.getAllAsync<Entry>("SELECT * FROM entries")
   return result
 }
+
+export async function getEntryByDate(date: string): Promise<boolean> {
+  const result = await db.getAllAsync<Entry>(`
+    SELECT * 
+    FROM entries
+    WHERE created_at = ?
+    `,
+    [date]
+  )
+  return result.length > 0;
+}
+
+

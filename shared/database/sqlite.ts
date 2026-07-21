@@ -10,7 +10,7 @@ export default function setUpDatabase() {
       energy INTEGER NOT NULL,
       productivity INTEGER NOT NULL,
       comment TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      created_at DATE UNIQUE NOT NULL DEFAULT CURRENT_DATE
     );
   `);
 }
