@@ -1,10 +1,10 @@
+import { CreateEntry } from "@/shared/types/createEntry";
 import * as entryService from "../../../shared/services/entryService";
-import { Entry } from "../../../shared/types/entry";
 
 export function useDailyEntry() {
   // TODO: add load and error handling states
 
-  async function saveDailyEntry(entry: Entry) {
+  async function saveDailyEntry(entry: CreateEntry) {
     await entryService.saveEntry(entry);
   }
 

@@ -15,8 +15,8 @@ type Props = {
 }
 
 export default function CalendarGrid({ month, year, metric }: Props) {
-  const { theme } = useTheme();
-  const commonStyles = createCommonStyles(theme);
+  const { themeColors } = useTheme();
+  const commonStyles = createCommonStyles(themeColors);
 
   const [ entries, setEntries ] = useState<Entry[] | null>(null);
   const { getMonthEntries } = useGetEntries()

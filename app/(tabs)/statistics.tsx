@@ -5,8 +5,8 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 
 export default function Statistics() {
-  const { theme } = useTheme();
-  const commonStyles = createCommonStyles(theme);
+  const { themeColors } = useTheme();
+  const commonStyles = createCommonStyles(themeColors);
 
   const [calendarProps, setCalendarProps] = useState({
     month: new Date().getMonth() + 1,

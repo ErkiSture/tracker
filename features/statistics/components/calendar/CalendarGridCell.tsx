@@ -11,11 +11,10 @@ type Props = {
 }
 
 export default function CalendarGridCell({key, rating, metric}: Props) {
-  const { theme, preference } = useTheme();
-  const commonStyles = createCommonStyles(theme);
+  const { themeColors,themePreference } = useTheme();
+  const commonStyles = createCommonStyles(themeColors);
 
-  const color: string = getColor(rating, theme, metric);
-  console.log(color)
+  const color: string = getColor(rating, themeColors, metric);
 
   return(
     <View style={[

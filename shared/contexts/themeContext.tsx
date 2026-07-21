@@ -1,18 +1,18 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
-import { darkTheme, lightTheme } from "../theme/colors";
+import { darkThemeColors, lightThemeColors } from "../theme/colors";
 import { ThemePreference } from "../types/themePreference";
 
 type ThemeContextType = {
-  theme: typeof lightTheme;
-  preference: ThemePreference;
+  themeColors: typeof lightThemeColors;
+  themePreference: ThemePreference;
   changeTheme: (theme: ThemePreference) => void;
 };
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: lightTheme,
-  preference: "system",
+  themeColors: lightThemeColors,
+  themePreference: "system",
   changeTheme: () => {},
 });
 
@@ -20,15 +20,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemTheme = useColorScheme();
   
   // Default to system theme so new users follow their device settings.
-  // User preference overrides this after they choose a theme.
-  const [preference, setPreference] = useState<ThemePreference>("system");
+  // UserthemePreference overrides this after they choose a theme.
+  const [themePreference, setThemePreference] = useState<ThemePreference>("system");
 
   useEffect(() => {
     async function loadTheme() {
       const saved = await AsyncStorage.getItem("theme");
 
       if (saved) {
-        setPreference(saved as ThemePreference);
+        setThemePreference(saved as ThemePreference);
       }
     }
 
@@ -36,22 +36,22 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   async function changeTheme(newTheme: ThemePreference) {
-    setPreference(newTheme);
+    setThemePreference(newTheme);
     await AsyncStorage.setItem("theme", newTheme);
   }
 
-  // Determine the actual theme to use based on user preference and system settings
+  // Determine the actual theme to use based on userthemePreference and system settings
   let isDark;
-  if (preference === "system") {
+  if (themePreference === "system") {
     isDark = systemTheme === "dark";
   } else {
-    isDark = preference === "dark";
+    isDark = themePreference === "dark";
   } 
   
-  const theme = isDark ? darkTheme : lightTheme;
+  const themeColors = isDark ? darkThemeColors : lightThemeColors;
 
   return (
-    <ThemeContext.Provider value={{theme, preference, changeTheme}}>
+    <ThemeContext.Provider value={{themeColors, themePreference, changeTheme}}>
       {children}
     </ThemeContext.Provider>
   );

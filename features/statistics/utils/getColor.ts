@@ -1,7 +1,8 @@
 import { Metric } from "@/shared/types/metric";
+import { ThemeColors } from "@/shared/types/themeColors";
 
-export default function getColor(rating: number | null, theme, metric: Metric): string {
-  if (rating === null) return theme.colors.text;
+export default function getColor(rating: number | null, themeColors: ThemeColors, metric: Metric): string {
+  if (rating === null) return themeColors.text;
 
   const intensity = rating / 10; // 0.1 - 1
 

@@ -1,7 +1,8 @@
 import * as entryStorage from "../storage/entryRepository";
+import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 
-export async function saveEntry(entry: Entry) {  
+export async function saveEntry(entry: CreateEntry) {  
   if (entry.mood < 1 || entry.mood > 10) {
     throw new Error("Mood must be between 1 and 10");
   }
@@ -22,7 +23,7 @@ export async function saveEntry(entry: Entry) {
   const raw = (entry.comment ?? "").trim();
   const comment = raw === "" ? null : raw;
 
-  const entryToSave: Entry = {
+  const entryToSave: CreateEntry = {
     ...entry,
     comment,
   };

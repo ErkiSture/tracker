@@ -1,5 +1,5 @@
+import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { useTheme } from "@react-navigation/native";
 import { Text, TextInput, View } from "react-native";
 
 type Props = {
@@ -8,8 +8,8 @@ type Props = {
 }
 
 export default function CommentInput({ comment, setComment }: Props) { 
-  const theme = useTheme();
-  const commonStyles = createCommonStyles(theme);
+  const {themeColors} = useTheme();
+  const commonStyles = createCommonStyles(themeColors);
 
   return (
     <View>

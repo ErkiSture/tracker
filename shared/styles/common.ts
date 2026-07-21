@@ -1,28 +1,29 @@
 import { StyleSheet } from "react-native";
+import { ThemeColors } from "../types/themeColors";
 
-export const createCommonStyles = (theme) => {
+export const createCommonStyles = (themeColors: ThemeColors) => {
   return StyleSheet.create({
     text: {
-      color: theme.colors.text,
+      color: themeColors.text,
       fontSize: 16,
       lineHeight: 22,
     },
 
     title: {
-      color: theme.colors.text,
+      color: themeColors.text,
       fontSize: 28,
       fontWeight: "700",
       marginBottom: 20,
     },
 
     button: {
-      backgroundColor: theme.colors.primary,
+      backgroundColor: themeColors.primary,
       paddingVertical: 12,
       paddingHorizontal: 20,
       borderRadius: 10,
       marginTop: 20,
       borderWidth: 1,
-      borderColor: theme.colors.border,
+      borderColor: themeColors.border,
       alignItems: "center",
       justifyContent: "center",
       shadowColor: "#000",
@@ -36,28 +37,28 @@ export const createCommonStyles = (theme) => {
     },
 
     buttonText: {
-      color: theme.colors.background,
+      color: themeColors.background,
       fontSize: 16,
       fontWeight: "600",
     },
 
     screenContainer: {
       flex: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: themeColors.background,
       paddingHorizontal: 20,
       paddingVertical: 24,
     },
 
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: themeColors.background,
       alignItems: "center",
       justifyContent: "center",
       padding: 20,
     },
 
     card: {
-      backgroundColor: theme.colors.surface ?? theme.colors.background,
+      backgroundColor: themeColors.surface ?? themeColors.background,
       borderRadius: 16,
       padding: 20,
       width: "100%",
@@ -74,13 +75,13 @@ export const createCommonStyles = (theme) => {
     textInput: {
       height: 48,
       width: "100%",
-      borderColor: theme.colors.border,
+      borderColor: themeColors.border,
       borderWidth: 1,
       borderRadius: 10,
       paddingHorizontal: 14,
       fontSize: 16,
-      color: theme.colors.text,
-      backgroundColor: theme.colors.background,
+      color: themeColors.text,
+      backgroundColor: themeColors.background,
     },
 
     spacingSmall: {

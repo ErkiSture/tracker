@@ -11,15 +11,15 @@ describe("ThemeContext", () => {
     jest.clearAllMocks();
   });
 
-  it("starts with system preference", async () => {
+  it("starts with systemthemePreference", async () => {
     const { result } = await renderHook(() => useTheme(), {
       wrapper: ThemeProvider,
     });
 
-    expect(result.current.preference).toBe("system");
+    expect(result.current.themePreference).toBe("system");
   });
 
-  it("can change theme preference", async () => {
+  it("can change themethemePreference", async () => {
     const { result } = await renderHook(() => useTheme(), {
       wrapper: ThemeProvider,
     });
@@ -28,10 +28,10 @@ describe("ThemeContext", () => {
       result.current.changeTheme("dark");
     });
     
-    expect(result.current.preference).toBe("dark");
+    expect(result.current.themePreference).toBe("dark");
   });
 
-  it("saves theme preference to AsyncStorage", async () => {
+  it("saves themethemePreference to AsyncStorage", async () => {
     const { result } = await renderHook(() => useTheme(), {
       wrapper: ThemeProvider,
     });
@@ -43,24 +43,24 @@ describe("ThemeContext", () => {
     expect(AsyncStorage.setItem).toHaveBeenCalledWith("theme", "dark");
   })
 
-  it("loads theme preference from AsyncStorage", async () => {
+  it("loads themethemePreference from AsyncStorage", async () => {
     AsyncStorage.getItem = jest.fn().mockResolvedValue("dark")
 
     const { result } = await renderHook(() => useTheme(), {
       wrapper: ThemeProvider
     });
 
-    expect(result.current.preference).toBe("dark");
+    expect(result.current.themePreference).toBe("dark");
   })
 
-  it("falls back to system preference if AsyncStorage is empty", async () => {
+  it("falls back to systemthemePreference if AsyncStorage is empty", async () => {
     AsyncStorage.getItem = jest.fn().mockResolvedValue(null)
 
     const { result } = await renderHook(() => useTheme(), {
       wrapper: ThemeProvider
     });
 
-    expect(result.current.preference).toBe("system");
+    expect(result.current.themePreference).toBe("system");
   });
 })
 

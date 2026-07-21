@@ -5,9 +5,8 @@ import { View } from "react-native";
 
 export default function Index() {
 
-  const { theme } = useTheme();
-    
-  const styles = createCommonStyles(theme);
+  const { themeColors } = useTheme();
+  const styles = createCommonStyles(themeColors);
 
   return (
     <View style={styles.screenContainer}>

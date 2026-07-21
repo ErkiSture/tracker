@@ -3,8 +3,8 @@ import { createCommonStyles } from "@/shared/styles/common";
 import { Pressable, Text, View } from "react-native";
 
 export default function Settings() {
-  const { theme, changeTheme } = useTheme();
-  const commonStyles = createCommonStyles(theme);
+  const { themeColors, changeTheme } = useTheme();
+  const commonStyles = createCommonStyles(themeColors);
 
   return (
     <View style={commonStyles.screenContainer}>

@@ -1,7 +1,8 @@
 import setUpDatabase, { db } from "@/shared/database/sqlite";
+import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 
-export async function saveEntry(entry: Entry) {
+export async function saveEntry(entry: CreateEntry) {
   const { mood, energy, productivity, comment } = entry;
   db.runSync(
     "INSERT INTO entries (mood, energy, productivity, comment) VALUES (?, ?, ?, ?)",
@@ -22,6 +23,5 @@ export async function resetDatabase() {
 
 export async function getMonthEntries(month: number): Promise<Entry[]>{
   const result = await db.getAllAsync<Entry>("SELECT * FROM entries")
-  // console.log(result);
   return result
 }

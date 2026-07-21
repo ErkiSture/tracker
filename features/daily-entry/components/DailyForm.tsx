@@ -2,7 +2,7 @@ import { useTheme } from "@/shared/contexts/themeContext";
 import { seedEntries } from "@/shared/database/seedEntries";
 import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
-import { Button, Pressable, Text } from "react-native";
+import { Pressable, Text } from "react-native";
 import { resetDatabase } from "../../../shared/storage/entryRepository";
 import { useDailyEntry } from "../hooks/useDailyEntry";
 import { useEntries } from "../hooks/useEntries";
@@ -10,8 +10,8 @@ import CommentInput from "./CommentInput";
 import RatingInput from "./RatingInput";
 
 export default function DailyForm() {
-  const { theme } = useTheme();
-  const commonStyles = createCommonStyles(theme);
+  const { themeColors } = useTheme();
+  const commonStyles = createCommonStyles(themeColors);
 
   const [mood, setMood] = useState<number>(5);
   const [energy, setEnergy] = useState<number>(5);
@@ -42,10 +42,9 @@ export default function DailyForm() {
       <Pressable style={commonStyles.button} onPress={resetDatabase}>
         <Text style={commonStyles.buttonText}>reset db</Text>
       </Pressable>
-      <Button
-        title="Seed database"
-        onPress={() => seedEntries()}
-      />
+      <Pressable style={commonStyles.button} onPress={seedEntries}>
+        <Text style={commonStyles.buttonText}>Seed database</Text>
+      </Pressable>
     </>
   );
 }

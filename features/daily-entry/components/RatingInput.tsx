@@ -13,8 +13,8 @@ export default function RatingInput({
   value,
   onChange,
 }: Props) {
-  const { theme } = useTheme();
-  const commonStyles = createCommonStyles(theme);
+  const { themeColors } = useTheme();
+  const commonStyles = createCommonStyles(themeColors);
 
   return (
     <View>
@@ -26,8 +26,8 @@ export default function RatingInput({
             onPress={() => onChange(number)}
             style={[
               styles.number,
-              { borderColor: theme.colors.border },
-              value === number && { backgroundColor: theme.colors.primary },
+              { borderColor: themeColors.border },
+              value === number && { backgroundColor: themeColors.primary },
             ]}
           >
             <Text style={commonStyles.text}>{number}</Text>
