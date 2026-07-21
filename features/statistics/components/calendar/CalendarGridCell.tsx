@@ -2,7 +2,7 @@ import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Metric } from "@/shared/types/metric";
 import { StyleSheet, Text, View } from "react-native";
-import getColor from "../../utils/getColor";
+import getCellColor from "../../utils/getCellColor";
 
 type Props = {
   key: number,
@@ -14,7 +14,7 @@ export default function CalendarGridCell({key, rating, metric}: Props) {
   const { themeColors,themePreference } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const color: string = getColor(rating, themeColors, metric);
+  const color: string = getCellColor(rating, themeColors, metric);
 
   return(
     <View style={[
