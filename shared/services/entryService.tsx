@@ -30,7 +30,6 @@ export async function saveEntry(entry: CreateEntry) {
   const entryExists = await getEntryByDate(currentDate);
 
   if (entryExists) {
-    console.log(3424234)
     throw new Error("An entry already exists for today");
   }
 

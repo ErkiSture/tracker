@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { act, renderHook } from "@testing-library/react-native";
-import { ThemeProvider, useTheme } from "../shared/contexts/themeContext";
+import { ThemeProvider, useTheme } from "../../shared/contexts/themeContext";
 
 describe("ThemeContext", () => {
   beforeEach(async () => {
