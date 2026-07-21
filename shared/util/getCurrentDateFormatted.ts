@@ -1,4 +1,4 @@
-export default function getTodayDateFormatted(): string {
+export default function getCurrentDateFormatted(): string {
   const date = new Date()
   return [
     date.getFullYear(),
