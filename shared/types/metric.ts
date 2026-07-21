@@ -1,0 +1,1 @@
+export type Metric = "mood" | "energy" | "productivity"

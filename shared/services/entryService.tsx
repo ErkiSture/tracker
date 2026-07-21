@@ -33,3 +33,8 @@ export async function getAllEntries(): Promise<Entry[]> {
   const entries = await entryStorage.getAllEntries();
   return entries;
 }
+
+export async function getMonthEntries(month: number): Promise<Entry[]> {
+  const entries = await entryStorage.getMonthEntries(month);
+  return entries;
+}

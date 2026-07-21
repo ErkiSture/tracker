@@ -1,10 +1,11 @@
 import { useTheme } from "@/shared/contexts/themeContext";
+import { seedEntries } from "@/shared/database/seedEntries";
 import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
-import { Pressable, Text } from "react-native";
+import { Button, Pressable, Text } from "react-native";
+import { resetDatabase } from "../../../shared/storage/entryRepository";
 import { useDailyEntry } from "../hooks/useDailyEntry";
 import { useEntries } from "../hooks/useEntries";
-import { resetDatabase } from "../storage/entryRepository";
 import CommentInput from "./CommentInput";
 import RatingInput from "./RatingInput";
 
@@ -41,6 +42,10 @@ export default function DailyForm() {
       <Pressable style={commonStyles.button} onPress={resetDatabase}>
         <Text style={commonStyles.buttonText}>reset db</Text>
       </Pressable>
+      <Button
+        title="Seed database"
+        onPress={() => seedEntries()}
+      />
     </>
   );
 }

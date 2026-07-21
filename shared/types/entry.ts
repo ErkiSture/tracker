@@ -3,4 +3,5 @@ export type Entry = {
   energy: number;
   productivity: number;
   comment: string | null;
+  created_at: any
 }

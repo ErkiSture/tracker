@@ -19,3 +19,9 @@ export async function resetDatabase() {
   db.execSync("DROP TABLE IF EXISTS entries");
   setUpDatabase();
 }
+
+export async function getMonthEntries(month: number): Promise<Entry[]>{
+  const result = await db.getAllAsync<Entry>("SELECT * FROM entries")
+  // console.log(result);
+  return result
+}

@@ -1,5 +1,5 @@
-import * as entryService from "../services/entryService";
-import { Entry } from "../types/entry";
+import * as entryService from "../../../shared/services/entryService";
+import { Entry } from "../../../shared/types/entry";
 
 export function useDailyEntry() {
   // TODO: add load and error handling states

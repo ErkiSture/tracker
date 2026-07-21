@@ -1,4 +1,4 @@
-import * as entryService from "../services/entryService";
+import * as entryService from "../../../shared/services/entryService";
 
 export function useEntries() {
   async function getAllEntries() {
