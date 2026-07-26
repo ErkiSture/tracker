@@ -1,6 +1,7 @@
 import setUpDatabase, { db } from "@/shared/database/sqlite";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
+import { getMonthDateRange } from "../util/getMonthDateRange";
 
 export async function saveEntry(entry: CreateEntry) {
   const { mood, energy, productivity, comment } = entry;
@@ -21,9 +22,18 @@ export async function resetDatabase() {
   setUpDatabase();
 }
 
-export async function getMonthEntries(month: number): Promise<Entry[]>{
-  const result = await db.getAllAsync<Entry>("SELECT * FROM entries")
-  return result
+export async function getMonthEntries(year: number, month: number): Promise<Entry[]>{
+  const { start, end } = getMonthDateRange(year, month);
+
+  return await db.getAllAsync<Entry>(
+    `
+    SELECT *
+    FROM entries
+    WHERE created_at >= ?
+      AND created_at < ?
+    `, 
+    [start, end]
+  );
 }
 
 export async function getEntryByDate(date: string): Promise<boolean> {

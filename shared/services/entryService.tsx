@@ -45,7 +45,7 @@ export async function getAllEntries(): Promise<Entry[]> {
   return entries;
 }
 
-export async function getMonthEntries(month: number): Promise<Entry[]> {
-  const entries = await entryStorage.getMonthEntries(month);
+export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
+  const entries = await entryStorage.getMonthEntries(year, month);
   return entries;
 }

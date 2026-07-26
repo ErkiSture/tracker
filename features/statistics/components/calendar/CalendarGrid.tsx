@@ -22,13 +22,13 @@ export default function CalendarGrid({ month, year, metric }: Props) {
   const { getMonthEntries } = useGetEntries()
   
   async function loadEntries() {
-    const entries = await getMonthEntries(month);
+    const entries = await getMonthEntries(year, month);
     setEntries(entries);
   }
   
   useEffect(() => {
     loadEntries();
-  }, [])
+  }, [month, year])
 
   // Cells are reloaded on page visit since a new entry might have been added
   useFocusEffect(

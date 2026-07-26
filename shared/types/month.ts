@@ -1,4 +1,4 @@
-export type Month =
+export type MonthNames =
   | "January"
   | "February"
   | "March"
@@ -12,3 +12,17 @@ export type Month =
   | "November"
   | "December";
 
+export const monthNames: MonthNames[] = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]

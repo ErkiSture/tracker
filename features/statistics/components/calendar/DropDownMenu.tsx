@@ -1,25 +1,23 @@
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Metric } from "@/shared/types/metric";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-type Props = {
-  selectedMetric: Metric
-  setSelectedMetric: (metric: Metric) => void;
-}
+type Props<T extends string> = {
+  options: T[];
+  selected: T;
+  onSelect: (value: T) => void;
+};
 
-export default function CalendarMetricSelector({ selectedMetric, setSelectedMetric }: Props) {
+export default function DropDownMenu<T extends string>({
+  options,
+  selected,
+  onSelect,
+}: Props<T>) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
   const [open, setOpen] = useState(false);
-
-  const options: Metric[] = [
-    "mood",
-    "energy",
-    "productivity",
-  ];
 
   return (
     <View style={styles.container}>
@@ -28,7 +26,7 @@ export default function CalendarMetricSelector({ selectedMetric, setSelectedMetr
         onPress={() => setOpen((prev) => !prev)}
       >
         <Text style={commonStyles.text}>
-          {selectedMetric}
+          {selected}
         </Text>
       </Pressable>
 
@@ -42,17 +40,17 @@ export default function CalendarMetricSelector({ selectedMetric, setSelectedMetr
             },
           ]}
         >
-          {options.map((metric) => (
+          {options.map((option, index) => (
             <Pressable
-              key={metric}
+              key={index}
               style={styles.option}
               onPress={() => {
-                setSelectedMetric(metric);
+                onSelect(option);
                 setOpen(false);
               }}
             >
               <Text style={commonStyles.text}>
-                {metric}
+                {option}
               </Text>
             </Pressable>
           ))}
@@ -84,7 +82,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     zIndex: 20,
-    elevation: 5, // Android shadow/layering
+    elevation: 5,
   },
 
   option: {
