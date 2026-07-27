@@ -6,6 +6,7 @@ import { useFocusEffect } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import useGetEntries from "../../hooks/useGetEntries";
+import { getDaysInMonth, mapEntriesByDay } from "../../utils/calendar";
 import CalendarGridCell from "./CalendarGridCell";
 import EntryDetailsModal from "./EntryDetailsModal";
 
@@ -19,7 +20,7 @@ export default function CalendarGrid({ month, year, metric }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
   
-  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
+  const [ selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [ entries, setEntries ] = useState<Entry[] | null>(null);
   const { getMonthEntries } = useGetEntries()
   
@@ -39,29 +40,23 @@ export default function CalendarGrid({ month, year, metric }: Props) {
     }, [])
   );  
   
-  const daysInMonth = new Date(year, month, 0).getDate();
+  const daysInMonth = getDaysInMonth(year, month)
+  const entryMap = mapEntriesByDay(entries ?? []);
   const cells = [];
   
   if (entries) {
-    // Map every entry to day of month
-    const entryMap = new Map(
-      entries.map(entry => [
-        new Date(entry.created_at).getDate(), 
-        entry,
-      ])
-    );
-    
     // Create cells for the grid
     for (let day = 1; day <= daysInMonth; day++) {
       const entry = entryMap.get(day);
-      const rating = entry?.[metric] ?? null;
-      const cell = <CalendarGridCell 
-        key={day} 
-        rating={rating} 
-        metric={metric}
-        onPress={() => setSelectedEntry(entry ?? null)}
-      />;
-      cells.push(cell);
+
+      cells.push(
+        <CalendarGridCell 
+          key={day} 
+          rating={entry?.[metric] ?? null} 
+          metric={metric}
+          onPress={() => setSelectedEntry(entry ?? null)}
+        />
+      );
     }
   }
 
