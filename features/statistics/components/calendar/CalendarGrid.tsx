@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import useGetEntries from "../../hooks/useGetEntries";
 import CalendarGridCell from "./CalendarGridCell";
+import EntryDetailsModal from "./EntryDetailsModal";
 
 type Props = {
   month: number;
@@ -17,7 +18,8 @@ type Props = {
 export default function CalendarGrid({ month, year, metric }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
-
+  
+  const [selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
   const [ entries, setEntries ] = useState<Entry[] | null>(null);
   const { getMonthEntries } = useGetEntries()
   
@@ -29,14 +31,14 @@ export default function CalendarGrid({ month, year, metric }: Props) {
   useEffect(() => {
     loadEntries();
   }, [month, year])
-
+  
   // Cells are reloaded on page visit since a new entry might have been added
   useFocusEffect(
     useCallback(() => {
       loadEntries();
     }, [])
   );  
-
+  
   const daysInMonth = new Date(year, month, 0).getDate();
   const cells = [];
   
@@ -53,15 +55,26 @@ export default function CalendarGrid({ month, year, metric }: Props) {
     for (let day = 1; day <= daysInMonth; day++) {
       const entry = entryMap.get(day);
       const rating = entry?.[metric] ?? null;
-      const cell = <CalendarGridCell key={day} rating={rating} metric={metric}/>;
+      const cell = <CalendarGridCell 
+        key={day} 
+        rating={rating} 
+        metric={metric}
+        onPress={() => setSelectedEntry(entry ?? null)}
+      />;
       cells.push(cell);
     }
   }
 
   return (
-    <View style={styles.grid}>
-      {cells}
-    </View>
+    <>
+      <View style={styles.grid}>
+        {cells}
+      </View>
+      <EntryDetailsModal
+        entry={selectedEntry}
+        onClose={() => setSelectedEntry(null)}
+      />
+    </>
   )
 }
 

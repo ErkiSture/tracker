@@ -4,7 +4,7 @@ import { monthNames } from "@/shared/types/month";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = {
-  month: number; // 1-12
+  month: number;
   year: number;
   onPreviousMonth: () => void;
   onNextMonth: () => void;
