@@ -3,7 +3,7 @@ import { seedEntries } from "@/shared/database/seedEntries";
 import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
 import { Pressable, Text } from "react-native";
-import { resetDatabase } from "../../../shared/storage/entryRepository";
+import { resetDatabase } from "../../../shared/repositories/entryRepository";
 import { useDailyEntry } from "../hooks/useDailyEntry";
 import { useEntries } from "../hooks/useEntries";
 import CommentInput from "./CommentInput";

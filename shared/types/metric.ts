@@ -1,7 +1,4 @@
-export type Metric = "mood" | "energy" | "productivity"
-
-export const metrics: Metric[] = [
-  "mood",
-  "energy",
-  "productivity",
-]
+export type Metric = {
+  id: number;
+  name: string;
+}

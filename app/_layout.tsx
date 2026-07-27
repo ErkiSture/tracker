@@ -1,3 +1,4 @@
+import { MetricProvider } from "@/shared/contexts/metricContext";
 import { ThemeProvider } from "@/shared/contexts/themeContext";
 import setUpDatabase from "@/shared/database/sqlite";
 import { Stack } from "expo-router";
@@ -11,9 +12,11 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
-      </Stack>
+      <MetricProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
+        </Stack>
+      </MetricProvider>
     </ThemeProvider>
   );
 }

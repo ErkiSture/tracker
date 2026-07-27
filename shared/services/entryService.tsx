@@ -1,5 +1,5 @@
-import * as entryStorage from "../storage/entryRepository";
-import { getEntryByDate } from "../storage/entryRepository";
+import * as entryStorage from "../repositories/entryRepository";
+import { getEntryByDate } from "../repositories/entryRepository";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 import getCurrentDateFormatted from "../util/getCurrentDateFormatted";
