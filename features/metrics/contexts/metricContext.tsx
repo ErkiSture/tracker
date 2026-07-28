@@ -5,11 +5,15 @@ import { Metric } from "../types/metric";
 type MetricContextType = {
   metrics: Metric[]
   refreshMetrics: () => Promise<void>
+  addMetric: () => Promise<void>
+  removeMetric: () => Promise<void>
 }
 
 const MetricContext = createContext<MetricContextType>({
   metrics: [],
-  refreshMetrics: async () => {}
+  refreshMetrics: async () => {},
+  addMetric: async () => {},
+  removeMetric: async () => {},
 })
 
 export function MetricProvider({ children }: { children: React.ReactNode }) {
@@ -20,13 +24,21 @@ export function MetricProvider({ children }: { children: React.ReactNode }) {
     const metrics = await metricService.getMetrics();
     setMetrics(metrics);
   }
+
+  function addMetric() {
+    
+  }
+
+  function removeMetric() {
+
+  }
   
   useEffect(() => {
     refreshMetrics();
   }, [])
   
   return (
-    <MetricContext.Provider value={{ metrics, refreshMetrics }}>
+    <MetricContext.Provider value={{ metrics, refreshMetrics, addMetric, removeMetric }}>
       {children}
     </MetricContext.Provider>
   )

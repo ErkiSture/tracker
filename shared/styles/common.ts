@@ -74,7 +74,7 @@ export const createCommonStyles = (themeColors: ThemeColors) => {
 
     textInput: {
       height: 48,
-      width: "100%",
+      // width: "100%",
       borderColor: themeColors.border,
       borderWidth: 1,
       borderRadius: 10,

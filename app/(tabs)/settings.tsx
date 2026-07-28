@@ -1,3 +1,4 @@
+import SettingsSection from "@/features/settings/components/SettingsSection";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Pressable, Text, View } from "react-native";
@@ -28,6 +29,7 @@ export default function Settings() {
       >
         <Text style={commonStyles.buttonText}>System</Text>
       </Pressable>
+      <SettingsSection/>
     </View>
   );
 }
