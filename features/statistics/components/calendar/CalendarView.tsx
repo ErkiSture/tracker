@@ -50,9 +50,11 @@ export default function CalendarView() {
       />      
       {/* <DropDownMenu options={months} selected={selectedMonth} onSelect={setSelectedMetric} ></DropDownMenu> */}
       {/* <CalendarMetricSelector selectedMetric={selectedMetric} setSelectedMetric={setSelectedMetric}></CalendarMetricSelector> */}
-      <DropDownMenu options={metrics} selected={selectedMetric} onSelect={setSelectedMetric} ></DropDownMenu>
       {selectedMetric && (
-        <CalendarGrid month={selectedMonth} year={selectedYear} metric={selectedMetric}></CalendarGrid>
+        <>
+          <DropDownMenu options={metrics} selected={selectedMetric} onSelect={setSelectedMetric} ></DropDownMenu>
+          <CalendarGrid month={selectedMonth} year={selectedYear} metric={selectedMetric}></CalendarGrid>
+        </>
       )}
     </View>
   )

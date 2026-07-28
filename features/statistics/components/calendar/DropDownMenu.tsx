@@ -1,19 +1,20 @@
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
+import { Metric } from "@/shared/types/metric";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-type Props<T extends string> = {
-  options: T[];
-  selected: T;
-  onSelect: (value: T) => void;
+type Props = {
+  options: Metric[];
+  selected: Metric;
+  onSelect: (value: Metric) => void;
 };
 
-export default function DropDownMenu<T extends string>({
+export default function DropDownMenu({
   options,
   selected,
   onSelect,
-}: Props<T>) {
+}: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
@@ -26,7 +27,7 @@ export default function DropDownMenu<T extends string>({
         onPress={() => setOpen((prev) => !prev)}
       >
         <Text style={commonStyles.text}>
-          {selected}
+          {selected.name}
         </Text>
       </Pressable>
 
@@ -40,17 +41,17 @@ export default function DropDownMenu<T extends string>({
             },
           ]}
         >
-          {options.map((option, index) => (
+          {options.map((metric) => (
             <Pressable
-              key={index}
+              key={metric.id}
               style={styles.option}
               onPress={() => {
-                onSelect(option);
+                onSelect(metric);
                 setOpen(false);
               }}
             >
               <Text style={commonStyles.text}>
-                {option}
+                {metric.name}
               </Text>
             </Pressable>
           ))}

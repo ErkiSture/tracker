@@ -1,4 +1,4 @@
-export type EntryMetric = {
+type EntryMetric = {
   name: string
   value: number
 }
