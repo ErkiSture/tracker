@@ -4,19 +4,14 @@ import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 import getCurrentDateFormatted from "../util/getCurrentDateFormatted";
 
-export async function saveEntry(entry: CreateEntry) {  
-  if (entry.mood < 1 || entry.mood > 10) {
-    throw new Error("Mood must be between 1 and 10");
+export async function saveEntry(entry: CreateEntry) {
+  
+  for (const [key, value] of Object.entries(entry.values)) {
+    if (value < 1 || value > 10) {
+      throw new Error("Ratings must be between 1 and 10")
+    }
   }
-
-  if (entry.energy < 1 || entry.energy > 10) {
-    throw new Error("Energy must be between 1 and 10");
-  }
-
-  if (entry.productivity < 1 || entry.productivity > 10) {
-    throw new Error("Productivity must be between 1 and 10");
-  }
-
+  
   if (entry.comment && entry.comment.length > 500) {
     throw new Error("Comment must be less than 500 characters");
   }

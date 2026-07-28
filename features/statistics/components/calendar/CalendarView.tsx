@@ -1,5 +1,6 @@
-import { Metric, metrics } from "@/shared/types/metric";
-import { useState } from "react";
+import { useMetrics } from "@/shared/contexts/metricContext";
+import { Metric } from "@/shared/types/metric";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import CalendarGrid from "./CalendarGrid";
 import CalendarHeader from "./CalendarHeader";
@@ -11,7 +12,15 @@ export default function CalendarView() {
 
   const [selectedYear, setSelectedYear] = useState<number>(currentYear)
   const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
-  const [selectedMetric, setSelectedMetric] = useState<Metric>("mood");
+  const [selectedMetric, setSelectedMetric] = useState<Metric | null>(null);
+
+  const { metrics } = useMetrics();
+
+  useEffect(() => {
+    if (metrics.length > 0 && !selectedMetric) {
+      setSelectedMetric(metrics[0]);
+    }
+  }, [metrics])
 
   function previousMonth() {
     if (selectedMonth === 1) {
@@ -38,11 +47,13 @@ export default function CalendarView() {
       year={selectedYear}
       onPreviousMonth={previousMonth}
       onNextMonth={nextMonth}
-    />      
+      />      
       {/* <DropDownMenu options={months} selected={selectedMonth} onSelect={setSelectedMetric} ></DropDownMenu> */}
       {/* <CalendarMetricSelector selectedMetric={selectedMetric} setSelectedMetric={setSelectedMetric}></CalendarMetricSelector> */}
       <DropDownMenu options={metrics} selected={selectedMetric} onSelect={setSelectedMetric} ></DropDownMenu>
-      <CalendarGrid month={selectedMonth} year={selectedYear} metric={selectedMetric}></CalendarGrid>
+      {selectedMetric && (
+        <CalendarGrid month={selectedMonth} year={selectedYear} metric={selectedMetric}></CalendarGrid>
+      )}
     </View>
   )
 }

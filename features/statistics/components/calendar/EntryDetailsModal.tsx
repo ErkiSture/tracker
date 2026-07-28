@@ -21,6 +21,19 @@ export default function EntryDetailsModal({
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
+  const metricRows = []
+  
+  if (entry) {
+    for (const [metricId, metric] of Object.entries(entry.metrics)) {
+      metricRows.push(
+        <View key={metricId} style={styles.row}>
+          <Text style={commonStyles.text}>{metric.name}</Text>
+          <Text style={commonStyles.text}>{metric.value}/10</Text>
+        </View>
+      )
+    }   
+  }
+
   return (
     <Modal
       visible={entry !== null}
@@ -48,21 +61,7 @@ export default function EntryDetailsModal({
                 {entry.created_at}
               </Text>
 
-              <View style={styles.row}>
-                <Text style={commonStyles.text}>Mood</Text>
-                <Text style={commonStyles.text}>{entry.mood}/10</Text>
-              </View>
-
-              <View style={styles.row}>
-                <Text style={commonStyles.text}>Energy</Text>
-                <Text style={commonStyles.text}>{entry.energy}/10</Text>
-              </View>
-
-              <View style={styles.row}>
-                <Text style={commonStyles.text}>Productivity</Text>
-                <Text style={commonStyles.text}>{entry.productivity}/10</Text>
-              </View>
-
+              {metricRows}
               <Text style={[commonStyles.text, styles.commentTitle]}>
                 Comment
               </Text>

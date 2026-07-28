@@ -3,7 +3,7 @@ import { createCommonStyles } from "@/shared/styles/common";
 import { Entry } from "@/shared/types/entry";
 import { Metric } from "@/shared/types/metric";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import useGetEntries from "../../hooks/useGetEntries";
 import { getDaysInMonth, mapEntriesByDay } from "../../utils/calendar";
@@ -25,19 +25,18 @@ export default function CalendarGrid({ month, year, metric }: Props) {
   const { getMonthEntries } = useGetEntries()
   
   async function loadEntries() {
+    const start = Date.now();
     const entries = await getMonthEntries(year, month);
+    const end = Date.now();
+    console.log(`Loading entries: ${end - start} ms`);
     setEntries(entries);
   }
-  
-  useEffect(() => {
-    loadEntries();
-  }, [month, year])
   
   // Cells are reloaded on page visit since a new entry might have been added
   useFocusEffect(
     useCallback(() => {
       loadEntries();
-    }, [])
+    }, [year, month])
   );  
   
   const daysInMonth = getDaysInMonth(year, month)
@@ -52,11 +51,12 @@ export default function CalendarGrid({ month, year, metric }: Props) {
       cells.push(
         <CalendarGridCell 
           key={day} 
-          rating={entry?.[metric] ?? null} 
+          rating={entry?.metrics[metric.id]?.value ?? null}
           metric={metric}
           onPress={() => setSelectedEntry(entry ?? null)}
         />
       );
+
     }
   }
 

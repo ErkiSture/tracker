@@ -11,7 +11,7 @@ type Props = {
   onPress: () => void;
 }
 
-export default function CalendarGridCell({key, rating, metric, onPress}: Props) {
+export default function CalendarGridCell({ rating, metric, onPress}: Props) {
   const { themeColors, themePreference } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
