@@ -3,7 +3,7 @@ import { Metric } from "@/features/metrics/types/metric";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import CalendarGrid from "./CalendarGrid";
 import CalendarHeader from "./CalendarHeader";
 import DropDownMenu from "./DropDownMenu";
@@ -54,6 +54,8 @@ export default function CalendarView() {
     }
   }
 
+  if (!selectedMetric) return;
+
   return (
     <View>
       <CalendarHeader
@@ -63,27 +65,19 @@ export default function CalendarView() {
         onNextMonth={nextMonth}
       />
 
-      {metrics.length === 0 ? (
-        <Text style={commonStyles.text}>
-          No metrics created yet
-        </Text>
-      ) : (
-        selectedMetric && (
-          <>
-            <DropDownMenu
-              options={metrics}
-              selected={selectedMetric}
-              onSelect={setSelectedMetric}
-            />
+      <>
+        <DropDownMenu
+          options={metrics}
+          selected={selectedMetric}
+          onSelect={setSelectedMetric}
+        />
 
-            <CalendarGrid
-              month={selectedMonth}
-              year={selectedYear}
-              metric={selectedMetric}
-            />
-          </>
-        )
-      )}
+        <CalendarGrid
+          month={selectedMonth}
+          year={selectedYear}
+          metric={selectedMetric}
+        />
+      </>
     </View>
-  );
+  )
 }

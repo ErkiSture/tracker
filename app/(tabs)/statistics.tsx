@@ -1,8 +1,8 @@
-import CalendarView from "@/features/statistics/components/calendar/CalendarView";
+import StatisticsScreen from "@/features/statistics/components/StatisticsScreen";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export default function Statistics() {
   const { themeColors } = useTheme();
@@ -17,8 +17,7 @@ export default function Statistics() {
   return (
     <>
       <View style= {commonStyles.screenContainer}>
-        <Text style= {commonStyles.title}>Stats</Text>
-        <CalendarView></CalendarView>
+        <StatisticsScreen></StatisticsScreen>
       </View>
     </>
   );
