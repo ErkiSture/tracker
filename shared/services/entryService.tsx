@@ -1,4 +1,4 @@
-import * as entryStorage from "../repositories/entryRepository";
+import * as entryRepository from "../repositories/entryRepository";
 import { getEntryByDate } from "../repositories/entryRepository";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
@@ -33,14 +33,16 @@ export async function saveEntry(entry: CreateEntry) {
     comment,
   };
 
-await entryStorage.saveEntry(entryToSave);}
+await entryRepository.saveEntry(entryToSave);}
 
 export async function getAllEntries(): Promise<Entry[]> {
-  const entries = await entryStorage.getAllEntries();
-  return entries;
+  return await entryRepository.getAllEntries();
 }
 
 export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
-  const entries = await entryStorage.getMonthEntries(year, month);
-  return entries;
+  return await entryRepository.getMonthEntries(year, month);
+}
+
+export async function getRecentEntries(amount: number): Promise<Entry[]> {
+  return await entryRepository.getRecentEntries(amount)
 }
