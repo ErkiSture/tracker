@@ -26,6 +26,7 @@ export default function DevButtons() {
       <Pressable style={commonStyles.button} onPress={async () => {
         await seedEntries()
         await refreshMetrics()
+        await loadEntries();
       }}>
         <Text style={commonStyles.buttonText}>Seed database</Text>
       </Pressable>

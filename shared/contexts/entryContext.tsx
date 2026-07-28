@@ -8,12 +8,14 @@ type EntryContextType = {
   entries: Entry[]
   saveEntry: (entry: CreateEntry, date: string) => Promise<void>
   removeEntry: (id: number) => Promise<void>
+  loadEntries: () => Promise<void>
 }
 
 const entryContext = createContext<EntryContextType>({
   entries: [],
   saveEntry: async () => {},
   removeEntry: async () => {},
+  loadEntries: async () => {}
 })
 
 export default function EntryProvider({ children }: { children: React.ReactNode}) {

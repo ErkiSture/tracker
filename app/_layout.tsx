@@ -13,13 +13,13 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <MetricProvider>
-        <EntryProvider>
+      <EntryProvider>
+        <MetricProvider>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
           </Stack>
-        </EntryProvider>
-      </MetricProvider>
+        </MetricProvider>
+      </EntryProvider>
     </ThemeProvider>
   );
 }

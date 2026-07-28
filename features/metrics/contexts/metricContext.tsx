@@ -1,3 +1,4 @@
+import { useEntries } from "@/shared/contexts/entryContext";
 import { createContext, useContext, useEffect, useState } from "react";
 import * as metricService from "../service/metricService";
 import { Metric } from "../types/metric";
@@ -19,11 +20,11 @@ const MetricContext = createContext<MetricContextType>({
 export function MetricProvider({ children }: { children: React.ReactNode }) {
 
   const [metrics, setMetrics] = useState<Metric[]>([])
+  const { loadEntries } = useEntries()
 
   async function refreshMetrics() {
     const metrics = await metricService.getMetrics();
     setMetrics(metrics);
-    console.log("Metrics refreshed")
   }
 
   async function addMetric(name: string) {
@@ -33,8 +34,8 @@ export function MetricProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function removeMetric(id: number) {
-    console.log(id);
     await metricService.removeMetric(id);
+    await loadEntries();
     refreshMetrics();
   }
   
