@@ -43,7 +43,7 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
   // }
 
   return (
-    <entryContext.Provider value={{ entries, saveEntry, removeEntry, loadEntries }}> //remove loadEntries later if not used
+    <entryContext.Provider value={{ entries, saveEntry, removeEntry, loadEntries }}>
       {children}
     </entryContext.Provider>
   )
