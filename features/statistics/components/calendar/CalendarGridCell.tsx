@@ -1,6 +1,6 @@
+import { Metric } from "@/features/metrics/types/metric";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Metric } from "@/shared/types/metric";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import getCellColor from "../../utils/getCellColor";
 

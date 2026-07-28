@@ -1,4 +1,4 @@
-import { Metric } from "@/shared/types/metric";
+import { Metric } from "@/features/metrics/types/metric";
 import { ThemeColors } from "@/shared/types/themeColors";
 
 const RGB = {

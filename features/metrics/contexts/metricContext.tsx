@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import * as metricService from "../services/metricService";
+import * as metricService from "../service/metricService";
 import { Metric } from "../types/metric";
 
 type MetricContextType = {

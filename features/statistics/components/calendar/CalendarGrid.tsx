@@ -1,7 +1,7 @@
+import { Metric } from "@/features/metrics/types/metric";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Entry } from "@/shared/types/entry";
-import { Metric } from "@/shared/types/metric";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";

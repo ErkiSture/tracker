@@ -1,4 +1,4 @@
-import { MetricProvider } from "@/shared/contexts/metricContext";
+import { MetricProvider } from "@/features/metrics/contexts/metricContext";
 import { ThemeProvider } from "@/shared/contexts/themeContext";
 import setUpDatabase from "@/shared/database/sqlite";
 import { Stack } from "expo-router";

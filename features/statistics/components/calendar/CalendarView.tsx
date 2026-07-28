@@ -1,5 +1,5 @@
-import { useMetrics } from "@/shared/contexts/metricContext";
-import { Metric } from "@/shared/types/metric";
+import { useMetrics } from "@/features/metrics/contexts/metricContext";
+import { Metric } from "@/features/metrics/types/metric";
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import CalendarGrid from "./CalendarGrid";

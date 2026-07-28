@@ -1,4 +1,4 @@
-import { useMetrics } from "@/shared/contexts/metricContext";
+import { useMetrics } from "@/features/metrics/contexts/metricContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { seedEntries } from "@/shared/database/seedEntries";
 import { createCommonStyles } from "@/shared/styles/common";
