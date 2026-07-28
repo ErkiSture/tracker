@@ -1,9 +1,10 @@
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
+import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
+import getCurrentDateFormatted from "@/shared/util/getCurrentDateFormatted";
 import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { useDailyEntry } from "../hooks/useDailyEntry";
 import CommentInput from "./CommentInput";
 import RatingInput from "./RatingInput";
 
@@ -12,17 +13,16 @@ export default function DailyForm() {
   const commonStyles = createCommonStyles(themeColors);
   
   const [comment, setComment] = useState<string>("");
-
-  const { saveDailyEntry } = useDailyEntry();
-  
-  function handleSubmit() {
-    saveDailyEntry({values, comment});
-  }
-  
-  const { metrics } = useMetrics()
-  
   const [values, setValues] = useState<Record<number, number>>({})
 
+  const { saveEntry } = useEntries()
+  const { metrics } = useMetrics()
+  
+  function handleSubmit() {
+    const date = getCurrentDateFormatted()
+    saveEntry({values, comment}, date);
+  }
+  
   // Default ratings to 5 
   useEffect(() => {
     if (metrics.length === 0) return;

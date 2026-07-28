@@ -1,18 +1,18 @@
 import setUpDatabase, { db } from "@/shared/database/sqlite";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
-import { getMonthDateRange } from "../util/getMonthDateRange";
 
-export async function saveEntry(entry: CreateEntry) {
+export async function saveEntry(entry: CreateEntry, date: string) {
   const { values, comment } = entry;
 
   // Create the entry
   const result = await db.runAsync(
     `
-    INSERT INTO entries (comment)
-    VALUES (?)
+    INSERT INTO entries (comment, created_at)
+    VALUES (?, ?)
+
     `, 
-    [comment]
+    [comment, date]
   ); 
 
   const entryId = result.lastInsertRowId;
@@ -33,10 +33,82 @@ export async function saveEntry(entry: CreateEntry) {
   }
 }
 
-export async function getAllEntries(): Promise<Entry[]> {
-  const result = await db.getAllAsync<Entry>("SELECT * FROM entries");
-  console.log(result);
-  return result;
+
+export async function getRecentEntries(amount: number): Promise<Entry[]> {
+  const result = await db.getAllAsync<{
+    entryId: number
+    comment: string
+    created_at: string
+    metricId: number
+    name: string
+    value: number
+  }>(
+    `
+    SELECT
+    entries.id as entryId,
+    entries.comment,
+    entries.created_at,
+    metrics.id as metricId,
+    metrics.name,
+    entry_values.value 
+    FROM entries
+    JOIN entry_values
+    ON entry_values.entry_id = entries.id
+    JOIN metrics
+    ON entry_values.metric_id = metrics.id
+    ORDER BY entries.created_at DESC
+    LIMIT ?
+    `,
+    [amount]
+  )
+  
+  const entryMap = new Map<number, Entry>(); // Map<entry_id, Entry>
+  
+  // Map every new entry_id to an Entry object
+  for (const row of result) {
+    let entry = entryMap.get(row.entryId);
+    if (!entry) {
+      entry = {
+        id: row.entryId,
+        comment: row.comment,
+        created_at: row.created_at,
+        metrics: {}
+      }
+      entryMap.set(row.entryId, entry)
+    }
+    
+    entry.metrics[row.metricId] = {
+      name: row.name,
+      value:  row.value
+    }
+  }
+  
+  const entries = [...entryMap.values()]
+  
+  return entries
+}
+
+export async function removeEntry(id: number): Promise<boolean> {
+  const result = await db.runAsync(
+    `
+    DELETE FROM entries
+    WHERE id = ?
+    `,
+    [id]
+  );
+  
+  return result.changes > 0;
+}
+
+export async function getEntryByDate(date: string): Promise<boolean> {
+  const result = await db.getAllAsync<Entry>(`
+    SELECT * 
+    FROM entries
+    WHERE created_at = ?
+    `,
+    [date]
+  )
+  return result.length > 0;
 }
 
 export async function resetDatabase() {
@@ -53,123 +125,66 @@ export async function resetDatabase() {
   setUpDatabase();
 }
 
-export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
-  const { start, end } = getMonthDateRange(year, month);
+// export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
+// const { start, end } = getMonthDateRange(year, month);
 
-  const result = await db.getAllAsync<{
-    entryId: number
-    comment: string
-    created_at: string
-    metricId: number
-    name: string
-    value: number
-  }>(
-    `
-    SELECT
-      entries.id as entryId,
-      entries.comment,
-      entries.created_at,
-      metrics.id as metricId,
-      metrics.name,
-      entry_values.value 
-    FROM entries
-    JOIN entry_values
-    ON entry_values.entry_id = entries.id
-    JOIN metrics
-    ON entry_values.metric_id = metrics.id
-    WHERE created_at >= ?
-      AND created_at < ?
-    `,
-    [start, end]
-  );
+// const result = await db.getAllAsync<{
+// entryId: number
+// comment: string
+// created_at: string
+// metricId: number
+// name: string
+// value: number
+// }>(
+// `
+// SELECT
+// entries.id as entryId,
+// entries.comment,
+// entries.created_at,
+// metrics.id as metricId,
+// metrics.name,
+// entry_values.value 
+// FROM entries
+// JOIN entry_values
+// ON entry_values.entry_id = entries.id
+// JOIN metrics
+// ON entry_values.metric_id = metrics.id
+// WHERE created_at >= ?
+// AND created_at < ?
+// `,
+// [start, end]
+// );
 
-  const entryMap = new Map<number, Entry>(); // Map<entry_id, Entry>
-  
-  // Map every new entry_id to an Entry object
-  for (const row of result) {
-    let entry = entryMap.get(row.entryId);
-    if (!entry) {
-      entry = {
-        id: row.entryId,
-        comment: row.comment,
-        created_at: row.created_at,
-        metrics: {}
-      }
-      entryMap.set(row.entryId, entry)
-    }
-    
-    entry.metrics[row.metricId] = {
-      name: row.name,
-      value:  row.value
-    }
-  }
-  
-  const entries = [...entryMap.values()]
+// const entryMap = new Map<number, Entry>(); // Map<entry_id, Entry>
 
-  return entries
-}
+// // Map every new entry_id to an Entry object
+// for (const row of result) {
+// let entry = entryMap.get(row.entryId);
+// if (!entry) {
+// entry = {
+// id: row.entryId,
+// comment: row.comment,
+// created_at: row.created_at,
+// metrics: {}
+// }
+// entryMap.set(row.entryId, entry)
+// }
 
-export async function getEntryByDate(date: string): Promise<boolean> {
-  const result = await db.getAllAsync<Entry>(`
-    SELECT * 
-    FROM entries
-    WHERE created_at = ?
-    `,
-    [date]
-  )
-  return result.length > 0;
-}
+// entry.metrics[row.metricId] = {
+// name: row.name,
+// value:  row.value
+// }
+// }
 
-export async function getRecentEntries(amount: number): Promise<Entry[]> {
-  const result = await db.getAllAsync<{
-    entryId: number
-    comment: string
-    created_at: string
-    metricId: number
-    name: string
-    value: number
-  }>(
-    `
-    SELECT
-      entries.id as entryId,
-      entries.comment,
-      entries.created_at,
-      metrics.id as metricId,
-      metrics.name,
-      entry_values.value 
-    FROM entries
-    JOIN entry_values
-    ON entry_values.entry_id = entries.id
-    JOIN metrics
-    ON entry_values.metric_id = metrics.id
-    ORDER BY entries.created_at DESC
-    LIMIT ?
-    `,
-    [amount]
-  )
+// const entries = [...entryMap.values()]
 
-  const entryMap = new Map<number, Entry>(); // Map<entry_id, Entry>
-  
-  // Map every new entry_id to an Entry object
-  for (const row of result) {
-    let entry = entryMap.get(row.entryId);
-    if (!entry) {
-      entry = {
-        id: row.entryId,
-        comment: row.comment,
-        created_at: row.created_at,
-        metrics: {}
-      }
-      entryMap.set(row.entryId, entry)
-    }
-    
-    entry.metrics[row.metricId] = {
-      name: row.name,
-      value:  row.value
-    }
-  }
-  
-  const entries = [...entryMap.values()]
+// return entries
+// }
 
-  return entries
-}
+
+// export async function getAllEntries()  {
+//   const result = await db.getAllAsync("SELECT * FROM entries");
+//   console.log(result);
+//   return result;
+// }
+

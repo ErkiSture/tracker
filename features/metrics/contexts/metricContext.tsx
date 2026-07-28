@@ -23,6 +23,7 @@ export function MetricProvider({ children }: { children: React.ReactNode }) {
   async function refreshMetrics() {
     const metrics = await metricService.getMetrics();
     setMetrics(metrics);
+    console.log("Metrics refreshed")
   }
 
   async function addMetric(name: string) {

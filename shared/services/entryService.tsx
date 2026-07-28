@@ -2,9 +2,8 @@ import * as entryRepository from "../repositories/entryRepository";
 import { getEntryByDate } from "../repositories/entryRepository";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
-import getCurrentDateFormatted from "../util/getCurrentDateFormatted";
 
-export async function saveEntry(entry: CreateEntry) {
+export async function saveEntry(entry: CreateEntry, date: string) {
   
   for (const [key, value] of Object.entries(entry.values)) {
     if (value < 1 || value > 10) {
@@ -21,8 +20,7 @@ export async function saveEntry(entry: CreateEntry) {
   const comment = raw === "" ? null : raw;
 
   // Only let one entry per day exist
-  const currentDate = getCurrentDateFormatted()
-  const entryExists = await getEntryByDate(currentDate);
+  const entryExists = await getEntryByDate(date);
 
   if (entryExists) {
     throw new Error("An entry already exists for today");
@@ -33,16 +31,24 @@ export async function saveEntry(entry: CreateEntry) {
     comment,
   };
 
-await entryRepository.saveEntry(entryToSave);}
-
-export async function getAllEntries(): Promise<Entry[]> {
-  return await entryRepository.getAllEntries();
-}
-
-export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
-  return await entryRepository.getMonthEntries(year, month);
-}
+await entryRepository.saveEntry(entryToSave, date);}
 
 export async function getRecentEntries(amount: number): Promise<Entry[]> {
   return await entryRepository.getRecentEntries(amount)
 }
+
+export async function removeEntry(id: number): Promise<void> {
+  const removed = await entryRepository.removeEntry(id);
+  
+  if (!removed) {
+    throw new Error("Entry does not exist");
+  }
+}
+
+// export async function getAllEntries() {
+//   return await entryRepository.getAllEntries();
+// }
+
+// export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
+//   return await entryRepository.getMonthEntries(year, month);
+// }

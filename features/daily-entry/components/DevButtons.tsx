@@ -1,24 +1,32 @@
+import { useMetrics } from "@/features/metrics/contexts/metricContext";
+import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { seedEntries } from "@/shared/database/seedEntries";
 import { resetDatabase } from "@/shared/repositories/entryRepository";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Pressable, Text, View } from "react-native";
-import { useEntries } from "../hooks/useEntries";
 
 export default function DevButtons() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
-  const { getAllEntries } = useEntries();
+
+  const { refreshMetrics } = useMetrics()
+
+  const { loadEntries } = useEntries()
 
   return (
     <View style={commonStyles.sectionCard}>
-      <Pressable style={commonStyles.button} onPress={getAllEntries}>
-        <Text style={commonStyles.buttonText}>log all</Text>
-      </Pressable>
-      <Pressable style={commonStyles.button} onPress={resetDatabase}>
+      <Pressable style={commonStyles.button} onPress={async () => {
+        await resetDatabase();
+        await refreshMetrics();
+        await loadEntries();
+      }}>
         <Text style={commonStyles.buttonText}>reset db</Text>
       </Pressable>
-      <Pressable style={commonStyles.button} onPress={seedEntries}>
+      <Pressable style={commonStyles.button} onPress={async () => {
+        await seedEntries()
+        await refreshMetrics()
+      }}>
         <Text style={commonStyles.buttonText}>Seed database</Text>
       </Pressable>
     </View>
