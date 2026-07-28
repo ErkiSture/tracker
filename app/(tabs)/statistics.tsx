@@ -2,7 +2,7 @@ import StatisticsScreen from "@/features/statistics/components/StatisticsScreen"
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
-import { View } from "react-native";
+import { ScrollView } from "react-native";
 
 export default function Statistics() {
   const { themeColors } = useTheme();
@@ -16,9 +16,9 @@ export default function Statistics() {
 
   return (
     <>
-      <View style= {commonStyles.screenContainer}>
+      <ScrollView style= {commonStyles.screenContainer}>
         <StatisticsScreen></StatisticsScreen>
-      </View>
+      </ScrollView>
     </>
   );
 }

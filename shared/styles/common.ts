@@ -21,7 +21,7 @@ export const createCommonStyles = (themeColors: ThemeColors) => {
       paddingVertical: 12,
       paddingHorizontal: 20,
       borderRadius: 10,
-      marginTop: 20,
+      marginTop: 0,
       borderWidth: 1,
       borderColor: themeColors.border,
       alignItems: "center",
@@ -49,28 +49,28 @@ export const createCommonStyles = (themeColors: ThemeColors) => {
       paddingVertical: 24,
     },
 
-    container: {
-      flex: 1,
-      backgroundColor: themeColors.background,
-      alignItems: "center",
-      justifyContent: "center",
-      padding: 20,
-    },
+    // container: {
+    //   flex: 1,
+    //   backgroundColor: themeColors.background,
+    //   alignItems: "center",
+    //   justifyContent: "center",
+    //   padding: 20,
+    // },
 
-    card: {
-      backgroundColor: themeColors.surface ?? themeColors.background,
-      borderRadius: 16,
-      padding: 20,
-      width: "100%",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 3,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 6,
-      elevation: 4,
-    },
+    // card: {
+    //   backgroundColor: themeColors.surface ?? themeColors.background,
+    //   borderRadius: 16,
+    //   padding: 20,
+    //   width: "100%",
+    //   shadowColor: "#000",
+    //   shadowOffset: {
+    //     width: 0,
+    //     height: 3,
+    //   },
+    //   shadowOpacity: 0.1,
+    //   shadowRadius: 6,
+    //   elevation: 4,
+    // },
 
     textInput: {
       height: 48,
@@ -101,5 +101,33 @@ export const createCommonStyles = (themeColors: ThemeColors) => {
       alignItems: "center",
       justifyContent: "center",
     },
+
+    section: {
+      marginBottom: 40,
+      gap: 16
+    },
+
+    sectionTitle: {
+      color: themeColors.text,
+      fontSize: 20,
+      fontWeight: "600",
+      marginBottom: 12,
+    },
+
+    sectionCard: {
+      backgroundColor: themeColors.surface,
+      borderRadius: 16,
+      padding: 16,
+      borderWidth: 1,
+      borderColor: themeColors.border,
+      marginBottom: 20,
+      gap: 16
+    },
+
+    // divider: {
+    //   height: 1,
+    //   backgroundColor: themeColors.border,
+    //   marginVertical: 16,
+    // },
   });
 };

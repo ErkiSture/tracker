@@ -24,8 +24,8 @@ export default function MetricManager() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={commonStyles.title}>Custom metrics</Text>
+    <View style={commonStyles.sectionCard}>
+      <Text style={commonStyles.sectionTitle}>Custom metrics</Text>
 
       <AddMetricForm
         value={newMetric}

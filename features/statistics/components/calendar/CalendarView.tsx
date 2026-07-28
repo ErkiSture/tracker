@@ -57,7 +57,7 @@ export default function CalendarView() {
   if (!selectedMetric) return;
 
   return (
-    <View>
+    <View style={commonStyles.sectionCard}>
       <CalendarHeader
         month={selectedMonth}
         year={selectedYear}

@@ -21,7 +21,8 @@ export default function CalendarGridCell({ rating, metric, onPress}: Props) {
     <Pressable onPress={onPress}>
       <View style={[
         styles.cell,
-        { backgroundColor: color }
+        { backgroundColor: color },
+        commonStyles.center
       ]}>
         <Text style={commonStyles.text}>{rating}</Text>
       </View>

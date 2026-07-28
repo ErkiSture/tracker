@@ -12,8 +12,10 @@ export default function CommentInput({ comment, setComment }: Props) {
   const commonStyles = createCommonStyles(themeColors);
 
   return (
-    <View>
-      <Text>Comment:</Text>
+    <View style={{
+      gap: 12
+    }}>
+      <Text style={commonStyles.text}>Comment:</Text>
       <TextInput 
         style={commonStyles.textInput} 
         placeholder="Enter your comment..." 
