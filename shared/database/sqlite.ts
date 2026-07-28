@@ -32,7 +32,7 @@ export default function setUpDatabase() {
     
     CREATE TABLE IF NOT EXISTS metrics (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL
+      name TEXT UNIQUE NOT NULL 
     );
 
     CREATE TABLE IF NOT EXISTS entry_values (
