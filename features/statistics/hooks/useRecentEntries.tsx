@@ -1,18 +1,17 @@
-import * as entryService from "@/shared/services/entryService";
+import { useEntries } from "@/shared/contexts/entryContext";
 import { Entry } from "@/shared/types/entry";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { getRecentEntriesFromState } from "../utils/getRecentEntriesFromState";
 
-export default function useRecentEntries() {
-  const [entries, setEntries] = useState<Entry[]>([]);
+export default function useRecentEntries(amount: number): Entry[] {
+  const { entries, ensureRecentLoaded } = useEntries();
 
   useEffect(() => {
-    async function load() {
-      const result = await entryService.getRecentEntries(10);
-      setEntries(result);
-    }
+    ensureRecentLoaded(amount);
+  }, [amount]);
 
-    load();
-  }, []);
-
-  return { entries };
+  return useMemo(
+    () => getRecentEntriesFromState(entries, amount),
+    [entries, amount]
+  );
 }

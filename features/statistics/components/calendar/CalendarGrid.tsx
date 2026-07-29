@@ -1,12 +1,11 @@
 import { Metric } from "@/features/metrics/types/metric";
-import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Entry } from "@/shared/types/entry";
 import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import useMonthEntries from "../../hooks/useMonthEntries";
 import { getDaysInMonth, mapEntriesByDay } from "../../utils/calendar";
-import { getEntriesForMonth } from "../../utils/getEntriesForMonth";
 import CalendarGridCell from "./CalendarGridCell";
 import EntryDetailsModal from "./EntryDetailsModal";
 
@@ -22,12 +21,7 @@ export default function CalendarGrid({ month, year, metric }: Props) {
   
   const [ selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
 
-  const { entries } = useEntries();
-
-  const monthEntries = useMemo(
-    () => getEntriesForMonth(entries, year, month),
-    [entries, year, month]
-  );
+  const monthEntries = useMonthEntries(year, month)
 
   const entryMap = useMemo(
     () => mapEntriesByDay(monthEntries),

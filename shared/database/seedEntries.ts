@@ -1,15 +1,32 @@
-// database/seedEntries.ts
 import { db } from "./sqlite";
 
 export async function seedEntries() {
-  const year = 2026;
-  const month = 7;
+  const amount = 20000;
 
-  // Create metrics
   const metricNames = [
     "Mood",
     "Energy",
     "Productivity",
+    "Stress",
+    "Sleep",
+    "Exercise",
+    "Focus",
+    "Motivation",
+    "Happiness",
+    "Anxiety",
+    "Confidence",
+    "Creativity",
+    "Social",
+    "Nutrition",
+    "Hydration",
+    "Work",
+    "Study",
+    "Relaxation",
+    "Discipline",
+    "Patience",
+    "Gratitude",
+    "Pain",
+    "Health",
   ];
 
   const metricIds: Record<string, number> = {};
@@ -25,9 +42,7 @@ export async function seedEntries() {
 
     const metric = await db.getFirstAsync<{ id: number }>(
       `
-      SELECT id 
-      FROM metrics
-      WHERE name = ?
+      SELECT id FROM metrics WHERE name = ?
       `,
       [name]
     );
@@ -37,79 +52,79 @@ export async function seedEntries() {
     }
   }
 
+  const metrics = Object.values(metricIds);
 
-  const daysInMonth = new Date(year, month, 0).getDate();
+  const placeholders = metrics
+    .map(() => "(?, ?, ?)")
+    .join(", ");
 
-  for (let day = 1; day <= daysInMonth; day++) {
-    const createdAt = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  const start = performance.now();
 
-    // Create entry
-    const result = await db.runAsync(
-      `
-      INSERT INTO entries (
-        comment,
-        created_at
-      )
-      VALUES (?, ?)
-      `,
-      [
-        `Entry for ${createdAt}`,
-        createdAt,
-      ]
+  await db.execAsync("BEGIN TRANSACTION");
+
+  try {
+    const date = new Date();
+
+    // Start from yesterday (not today)
+    date.setDate(date.getDate() - 1);
+
+    let created = 0;
+
+    while (created < amount) {
+      // Randomly skip days (around 30% chance of no entry)
+      const shouldSkip = Math.random() < 0.3;
+
+      if (!shouldSkip) {
+        const createdAt = date.toISOString().split("T")[0];
+
+        const result = await db.runAsync(
+          `
+          INSERT INTO entries (
+            comment,
+            created_at
+          )
+          VALUES (?, ?)
+          `,
+          [
+            `Generated entry ${created + 1}`,
+            createdAt,
+          ]
+        );
+
+        const entryId = result.lastInsertRowId;
+
+        const values = metrics.flatMap(metricId => [
+          entryId,
+          metricId,
+          Math.floor(Math.random() * 10) + 1,
+        ]);
+
+        await db.runAsync(
+          `
+          INSERT INTO entry_values (
+            entry_id,
+            metric_id,
+            value
+          )
+          VALUES ${placeholders}
+          `,
+          values
+        );
+
+        created++;
+      }
+
+      // Always move backwards one day
+      date.setDate(date.getDate() - 1);
+    }
+
+    await db.execAsync("COMMIT");
+
+    console.log(
+      `Seeded ${amount} entries in ${(performance.now() - start).toFixed(0)}ms`
     );
-
-    const entryId = result.lastInsertRowId;
-
-
-    // Add metric values
-    await db.runAsync(
-      `
-      INSERT INTO entry_values (
-        entry_id,
-        metric_id,
-        value
-      )
-      VALUES (?, ?, ?)
-      `,
-      [
-        entryId,
-        metricIds["Mood"],
-        Math.floor(Math.random() * 10) + 1,
-      ]
-    );
-
-    await db.runAsync(
-      `
-      INSERT INTO entry_values (
-        entry_id,
-        metric_id,
-        value
-      )
-      VALUES (?, ?, ?)
-      `,
-      [
-        entryId,
-        metricIds["Energy"],
-        Math.floor(Math.random() * 10) + 1,
-      ]
-    );
-
-    await db.runAsync(
-      `
-      INSERT INTO entry_values (
-        entry_id,
-        metric_id,
-        value
-      )
-      VALUES (?, ?, ?)
-      `,
-      [
-        entryId,
-        metricIds["Productivity"],
-        Math.floor(Math.random() * 10) + 1,
-      ]
-    );
+  } catch (error) {
+    await db.execAsync("ROLLBACK");
+    throw error;
   }
-
-  console.log(`Seeded ${daysInMonth} entries`);
 }
