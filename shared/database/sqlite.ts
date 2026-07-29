@@ -20,10 +20,10 @@ import * as SQLite from "expo-sqlite";
 
 export const db = SQLite.openDatabaseSync('mood_tracker.db');
 
-export default function setUpDatabase() {
-  db.execSync(`PRAGMA foreign_keys = ON;`);
+export default async function setUpDatabase() {
+  await db.execSync(`PRAGMA foreign_keys = ON;`);
 
-  db.execSync(`
+  await db.execSync(`
     CREATE TABLE IF NOT EXISTS entries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       comment TEXT,

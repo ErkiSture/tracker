@@ -1,6 +1,8 @@
 import { db } from "@/shared/database/sqlite";
 import { Metric } from "../types/metric";
 
+const MAX_METRICS = 15;
+
 export async function getMetrics(): Promise<Metric[]> {
   const metrics = await db.getAllAsync<Metric>(`SELECT * FROM metrics`)
   return metrics
@@ -39,4 +41,15 @@ export async function removeMetric(id: number): Promise<boolean> {
   );
 
   return result.changes > 0
+}
+
+export async function getMetricCount(): Promise<number> {
+  const result = await db.getFirstAsync<{ count: number }>(
+    `
+    SELECT COUNT(*) as count
+    FROM metrics
+    `
+  );
+
+  return result?.count ?? 0;
 }
