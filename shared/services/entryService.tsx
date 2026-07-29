@@ -50,8 +50,3 @@ export async function removeEntry(id: number): Promise<void> {
 export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
   return await entryRepository.getMonthEntries(year, month);
 }
-
-// export async function getAllEntries() {
-//   return await entryRepository.getAllEntries();
-// }
-

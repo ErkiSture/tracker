@@ -35,6 +35,7 @@ export async function saveEntry(entry: CreateEntry, date: string): Promise<Entry
   }
 
   const savedEntry = await getEntryById(entryId);
+
   return savedEntry;
 }
 
@@ -56,9 +57,9 @@ export async function getEntryById(id: number): Promise<Entry> {
     metrics.name,
     entry_values.value 
     FROM entries
-    JOIN entry_values
+    LEFT JOIN entry_values
     ON entry_values.entry_id = entries.id
-    JOIN metrics
+    LEFT JOIN metrics
     ON entry_values.metric_id = metrics.id
     WHERE entries.id = ?
     `,
@@ -96,15 +97,14 @@ export async function getRecentEntries(amount: number): Promise<Entry[]> {
       ORDER BY created_at DESC
       LIMIT ?
     ) AS entries
-    JOIN entry_values
+    LEFT JOIN entry_values
       ON entry_values.entry_id = entries.id
-    JOIN metrics
+    LEFT JOIN metrics
       ON entry_values.metric_id = metrics.id
     ORDER BY entries.created_at DESC
     `,
     [amount]
   );
-
   return mapRowsToEntries(result);
 }
 
@@ -168,9 +168,9 @@ export async function getMonthEntries(year: number, month: number): Promise<Entr
     metrics.name,
     entry_values.value 
     FROM entries
-    JOIN entry_values
+    LEFT JOIN entry_values
     ON entry_values.entry_id = entries.id
-    JOIN metrics
+    LEFT JOIN metrics
     ON entry_values.metric_id = metrics.id
     WHERE created_at >= ?
     AND created_at < ?

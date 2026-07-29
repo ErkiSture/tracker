@@ -36,6 +36,7 @@ export function MetricProvider({ children }: { children: React.ReactNode }) {
     await metricService.removeMetric(id);
     await resetEntries();
     refreshMetrics();
+    console.log("metriContext removeMetric")
   }
   
   useEffect(() => {

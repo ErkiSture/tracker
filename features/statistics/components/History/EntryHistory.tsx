@@ -10,6 +10,8 @@ export default function EntryHistory() {
 
   const recentEntries = useRecentEntries(10);
 
+  if (recentEntries.length === 0) return null;
+
   return (
     <View style={commonStyles.sectionCard}>
       <Text style={commonStyles.sectionTitle}>Entry History</Text>

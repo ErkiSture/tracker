@@ -4,9 +4,9 @@ export function mapRowsToEntries(rows: {
   entryId: number;
   comment: string;
   created_at: string;
-  metricId: number;
-  name: string;
-  value: number;
+  metricId: number | null;
+  name: string | null;
+  value: number | null;
 }[]): Entry[] {
   const entryMap = new Map<number, Entry>();
 
@@ -24,10 +24,12 @@ export function mapRowsToEntries(rows: {
       entryMap.set(row.entryId, entry);
     }
 
-    entry.metrics[row.metricId] = {
-      name: row.name,
-      value: row.value,
-    };
+    if (row.metricId !== null) {
+      entry.metrics[row.metricId] = {
+        name: row.name!,
+        value: row.value!,
+      };
+    }
   }
 
   return [...entryMap.values()];
