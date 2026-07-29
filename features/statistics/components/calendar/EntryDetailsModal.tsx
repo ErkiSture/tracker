@@ -4,6 +4,7 @@ import { Entry } from "@/shared/types/entry";
 import {
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -21,8 +22,8 @@ export default function EntryDetailsModal({
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const metricRows = []
-  
+  const metricRows = [];
+
   if (entry) {
     for (const [metricId, metric] of Object.entries(entry.metrics)) {
       metricRows.push(
@@ -30,8 +31,8 @@ export default function EntryDetailsModal({
           <Text style={commonStyles.text}>{metric.name}</Text>
           <Text style={commonStyles.text}>{metric.value}/10</Text>
         </View>
-      )
-    }   
+      );
+    }
   }
 
   return (
@@ -41,11 +42,13 @@ export default function EntryDetailsModal({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <Pressable
-        style={styles.backdrop}
-        onPress={onClose}
-      >
+      <View style={styles.backdrop}>
         <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+        />
+
+        <View
           style={[
             styles.card,
             {
@@ -53,15 +56,18 @@ export default function EntryDetailsModal({
               borderColor: themeColors.border,
             },
           ]}
-          onPress={() => {}}
         >
           {entry && (
-            <>
+            <ScrollView
+              contentContainerStyle={styles.content}
+              showsVerticalScrollIndicator
+            >
               <Text style={[commonStyles.text, styles.title]}>
                 {entry.created_at}
               </Text>
 
               {metricRows}
+
               <Text style={[commonStyles.text, styles.commentTitle]}>
                 Comment
               </Text>
@@ -79,10 +85,10 @@ export default function EntryDetailsModal({
               >
                 <Text style={styles.closeText}>Close</Text>
               </Pressable>
-            </>
+            </ScrollView>
           )}
-        </Pressable>
-      </Pressable>
+        </View>
+      </View>
     </Modal>
   );
 }
@@ -97,8 +103,13 @@ const styles = StyleSheet.create({
 
   card: {
     width: "85%",
+    maxHeight: "70%",
     borderRadius: 16,
     borderWidth: 1,
+    overflow: "hidden",
+  },
+
+  content: {
     padding: 20,
     gap: 12,
   },
