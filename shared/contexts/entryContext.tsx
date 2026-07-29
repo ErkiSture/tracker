@@ -1,5 +1,5 @@
 import * as entryService from "@/shared/services/entryService";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 
@@ -7,7 +7,7 @@ type EntryContextType = {
   entries: Record<string, Entry>
   saveEntry: (entry: CreateEntry, date: string) => Promise<void>
   removeEntry: (id: number) => Promise<void>
-  loadEntries: () => Promise<void>
+  resetEntries: () => void
   ensureMonthLoaded: (year: number, month: number) => Promise<void>
   ensureRecentLoaded: (amount: number) => Promise<void>
 }
@@ -16,7 +16,7 @@ const entryContext = createContext<EntryContextType>({
   entries: {},
   saveEntry: async () => {},
   removeEntry: async () => {},
-  loadEntries: async () => {},
+  resetEntries: () => {},
   ensureMonthLoaded: async () => {},
   ensureRecentLoaded: async () => {}
 })
@@ -43,24 +43,11 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
     }));
   };
 
-  async function loadEntries() {
-    const start = performance.now();
-    const entries = await entryService.getRecentEntries(0);
-    const end = performance.now();
-    console.log(`Loading all entries took ${end - start} ms`);
-
-    const entriesByDate = Object.fromEntries(
-      entries.map(entry => [
-        entry.created_at,
-        entry
-      ])
-    );
-    setEntries(entriesByDate);
+  function resetEntries() {
+    setLoadedMonths(new Set());
+    setRecentLoaded(0);
+    setEntries({});
   }
-
-  useEffect(() => {
-    // loadEntries();
-  }, [])
 
   async function removeEntry(id: number) {
     await entryService.removeEntry(id)
@@ -107,12 +94,8 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
     setRecentLoaded(fetched.length)
   }
 
-  async function getEntriesBetweenDates(from: string, to: string): Promise<Entry[]> {
-
-  }
-
   return (
-    <entryContext.Provider value={{ entries, saveEntry, removeEntry, ensureMonthLoaded, ensureRecentLoaded, loadEntries }}>
+    <entryContext.Provider value={{ entries, saveEntry, removeEntry, ensureMonthLoaded, ensureRecentLoaded, resetEntries }}>
       {children}
     </entryContext.Provider>
   )

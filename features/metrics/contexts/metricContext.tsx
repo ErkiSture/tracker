@@ -20,7 +20,7 @@ const MetricContext = createContext<MetricContextType>({
 export function MetricProvider({ children }: { children: React.ReactNode }) {
 
   const [metrics, setMetrics] = useState<Metric[]>([])
-  const { loadEntries } = useEntries()
+  const { resetEntries } = useEntries()
 
   async function refreshMetrics() {
     const metrics = await metricService.getMetrics();
@@ -35,7 +35,7 @@ export function MetricProvider({ children }: { children: React.ReactNode }) {
 
   async function removeMetric(id: number) {
     await metricService.removeMetric(id);
-    await loadEntries();
+    await resetEntries();
     refreshMetrics();
   }
   

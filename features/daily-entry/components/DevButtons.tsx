@@ -12,21 +12,21 @@ export default function DevButtons() {
 
   const { refreshMetrics } = useMetrics()
 
-  const { loadEntries } = useEntries()
+  const {  } = useEntries()
 
   return (
     <View style={commonStyles.sectionCard}>
       <Pressable style={commonStyles.button} onPress={async () => {
         await resetDatabase();
         await refreshMetrics();
-        await loadEntries();
+        // await loadEntries();
       }}>
         <Text style={commonStyles.buttonText}>reset db</Text>
       </Pressable>
       <Pressable style={commonStyles.button} onPress={async () => {
         await seedEntries()
         await refreshMetrics()
-        await loadEntries();
+        // await loadEntries();
       }}>
         <Text style={commonStyles.buttonText}>Seed database</Text>
       </Pressable>
