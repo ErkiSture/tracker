@@ -55,6 +55,7 @@ export default function DailyForm() {
         label={metricName}
         value={value}
         onChange={(newValue) => updateValue(metricId, newValue)}
+        size={30}
       />
     )
   }
@@ -64,7 +65,7 @@ export default function DailyForm() {
       gap: 20
     }}>
       <Text style={commonStyles.title}>How was your day?</Text>
-      {ratingInputs}
+        {ratingInputs}
       <CommentInput comment={comment} setComment={setComment} />
       <Pressable style={commonStyles.button} onPress={handleSubmit}>
         <Text style={commonStyles.buttonText}>Save</Text>

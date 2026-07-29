@@ -52,7 +52,7 @@ export default function CalendarGrid({ month, year, metric }: Props) {
       </View>
       <EntryDetailsModal
         entry={selectedEntry}
-        onClose={() => setSelectedEntry(null)}
+        setSelectedEntry={setSelectedEntry}
       />
     </>
   )

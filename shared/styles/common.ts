@@ -49,32 +49,8 @@ export const createCommonStyles = (themeColors: ThemeColors) => {
       paddingVertical: 24,
     },
 
-    // container: {
-    //   flex: 1,
-    //   backgroundColor: themeColors.background,
-    //   alignItems: "center",
-    //   justifyContent: "center",
-    //   padding: 20,
-    // },
-
-    // card: {
-    //   backgroundColor: themeColors.surface ?? themeColors.background,
-    //   borderRadius: 16,
-    //   padding: 20,
-    //   width: "100%",
-    //   shadowColor: "#000",
-    //   shadowOffset: {
-    //     width: 0,
-    //     height: 3,
-    //   },
-    //   shadowOpacity: 0.1,
-    //   shadowRadius: 6,
-    //   elevation: 4,
-    // },
-
     textInput: {
       height: 48,
-      // width: "100%",
       borderColor: themeColors.border,
       borderWidth: 1,
       borderRadius: 10,
@@ -124,10 +100,12 @@ export const createCommonStyles = (themeColors: ThemeColors) => {
       gap: 16
     },
 
-    // divider: {
-    //   height: 1,
-    //   backgroundColor: themeColors.border,
-    //   marginVertical: 16,
-    // },
+    textButton: {
+
+    },
+
+    textButtonText: {
+      textDecorationLine: "underline",
+    }
   });
 };

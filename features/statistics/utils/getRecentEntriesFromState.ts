@@ -1,45 +1,13 @@
-// import { Entry } from "@/shared/types/entry";
-
 import { Entry } from "@/shared/types/entry";
+import getDateFormatted from "@/shared/util/getDateFormatted";
 
-// export function getRecentEntries(
-//   entries: Entry[],
-//   amount: number
-// ): Entry[] {
-//   return [...entries]
-//     .sort(
-//       (a, b) =>
-//         new Date(b.created_at).getTime() -
-//         new Date(a.created_at).getTime()
-//     )
-//     .slice(0, amount);
-// }
-
-
-
-
-
-// import { Entry } from "@/shared/types/entry";
-
-// export function getRecentEntriesFromState(
-//   entries: Record<string, Entry>,
-//   amount: number
-// ): Entry[] {
-//   const start = performance.now();
-//   const result = Object.values(entries)
-//     .sort(
-//       (a, b) =>
-//         new Date(b.created_at).getTime() -
-//         new Date(a.created_at).getTime()
-//     )
-//     .slice(0, amount);
-//   const end = performance.now();
-//   console.log(`getRecentEntriesFromState took ${end - start} ms`);
-//   return result
-// }
-
-
-
+function getDateFormattedFromDate(date: Date): string {
+  return getDateFormatted(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate()
+  );
+}
 
 export function getRecentEntriesFromState(
   entries: Record<string, Entry>,
@@ -57,7 +25,7 @@ export function getRecentEntriesFromState(
       break;
     }
 
-    const key = date.toISOString().split("T")[0];
+    const key = getDateFormattedFromDate(date)
     const entry = entries[key];
 
     if (entry) {
@@ -69,6 +37,7 @@ export function getRecentEntriesFromState(
 
   const end = performance.now();
   console.log(`getRecentEntriesFromState took ${end - start} ms`);
-
+  // console.log(result.length)
+  // console.log(entries)
   return result;
 }
