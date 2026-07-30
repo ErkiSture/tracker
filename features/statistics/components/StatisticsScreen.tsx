@@ -20,9 +20,10 @@ export default function StatisticsScreen() {
   //Instead, returns nothing if no entries are found
   return (
     <>
+        
       { hasMetrics && (
         <CalendarView/>
-      )}
+        )}
 
       <EntryHistory/> 
 

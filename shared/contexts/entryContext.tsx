@@ -1,5 +1,5 @@
 import * as entryService from "@/shared/services/entryService";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 
@@ -10,6 +10,7 @@ type EntryContextType = {
   resetEntries: () => void
   ensureMonthLoaded: (year: number, month: number) => Promise<void>
   ensureRecentLoaded: (amount: number) => Promise<void>
+  entriesOrdered: Entry[]
 }
 
 const entryContext = createContext<EntryContextType>({
@@ -18,7 +19,8 @@ const entryContext = createContext<EntryContextType>({
   removeEntry: async () => {},
   resetEntries: () => {},
   ensureMonthLoaded: async () => {},
-  ensureRecentLoaded: async () => {}
+  ensureRecentLoaded: async () => {},
+  entriesOrdered: []
 })
 
 export default function EntryProvider({ children }: { children: React.ReactNode}) {
@@ -27,11 +29,11 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
   const [ loadedMonths, setLoadedMonths ] = useState<Set<string>>(new Set());
   const [ recentLoaded, setRecentLoaded ] = useState(0);
 
-  // const entriesOrdered = useMemo<Entry[]>(() => {
-  //   return Object.values(entries).sort(
-  //     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  //   );
-  // }, [entries]);
+  const entriesOrdered = useMemo<Entry[]>(() => {
+    return Object.values(entries).sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+  }, [entries]);
   
   function getMonthKey(year: number, month: number) {
     return `${year}-${String(month).padStart(2, "0")}`;
@@ -84,7 +86,7 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
     });
 
     const end = performance.now();
-    // console.log(`ensureMonthLoaded took ${end - start} ms`);
+    console.log(`ensureMonthLoaded took ${end - start} ms`);
   }
 
   async function ensureRecentLoaded(amount: number) {
@@ -108,7 +110,7 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
   }
 
   return (
-    <entryContext.Provider value={{ entries, saveEntry, removeEntry, ensureMonthLoaded, ensureRecentLoaded, resetEntries }}>
+    <entryContext.Provider value={{ entries, saveEntry, removeEntry, ensureMonthLoaded, ensureRecentLoaded, resetEntries, entriesOrdered }}>
       {children}
     </entryContext.Provider>
   )
