@@ -44,9 +44,9 @@ export async function getEntryById(id: number): Promise<Entry> {
     entryId: number
     comment: string
     created_at: string
-    metricId: number
-    name: string
-    value: number
+    metricId: number | null
+    name: string | null
+    value: number | null
   }>(
     `
     SELECT
@@ -79,9 +79,9 @@ export async function getRecentEntries(amount: number): Promise<Entry[]> {
     entryId: number
     comment: string
     created_at: string
-    metricId: number
-    name: string
-    value: number
+    metricId: number | null
+    name: string | null
+    value: number | null
   }>(
     `
     SELECT
@@ -155,9 +155,9 @@ export async function getMonthEntries(year: number, month: number): Promise<Entr
     entryId: number
     comment: string
     created_at: string
-    metricId: number
-    name: string
-    value: number
+    metricId: number | null
+    name: string | null
+    value: number | null
   }>(
     `
     SELECT
