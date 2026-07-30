@@ -2,31 +2,31 @@ import { db } from "@/shared/database/sqlite";
 import { Metric } from "../types/metric";
 
 export async function getMetrics(): Promise<Metric[]> {
-  const metrics = await db.getAllAsync<Metric>(`SELECT * FROM metrics`)
-  return metrics
-}
-
-export async function metricExists(name: string): Promise<boolean> {
-  const result = await db.getFirstAsync<{ count: number }>(
-    `
-    SELECT COUNT(*) as count
-    FROM metrics
-    WHERE name = ?
-    `,
-    [name]
-  );
-
-  return (result?.count ?? 0) > 0;
+  const metrics = await db.getAllAsync<Metric>(`SELECT * FROM metrics`);
+  return metrics;
 }
 
 export async function addMetric(name: string): Promise<void> {
-  const result = await db.runAsync(
+  await db.runAsync(
     `
     INSERT INTO metrics (name)
     VALUES (?)
     `,
     [name]
   );
+}
+
+export async function metricExists(name: string): Promise<boolean> {
+  const result = await db.getFirstAsync<{ id: number }>(
+    `
+    SELECT id
+    FROM metrics
+    WHERE name = ?
+    `,
+    [name]
+  );
+
+  return result !== null;
 }
 
 export async function removeMetric(id: number): Promise<boolean> {

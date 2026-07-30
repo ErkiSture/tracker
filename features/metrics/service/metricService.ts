@@ -21,7 +21,7 @@ export async function addMetric(name: string): Promise<void> {
   }
 
   // Limit number of metrics
-  const metricCount = await metricRepository.getMetricCount()
+  const metricCount = await metricRepository.getMetricCount();
   if (metricCount >= MAX_METRICS) {
     throw new Error(`Maximum of ${MAX_METRICS} metrics reached`);
   }

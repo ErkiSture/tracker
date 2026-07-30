@@ -20,7 +20,7 @@ export default function EditEntryForm({ entry, onSaved }: Props) {
   const { removeEntry, saveEntry } = useEntries();
   const { metrics } = useMetrics();
 
-  const [comment, setComment] = useState(entry.comment ?? "");
+  const [comment, setComment] = useState(entry.comment);
 
   const [values, setValues] = useState<Record<number, number>>(() => {
     return Object.fromEntries(
