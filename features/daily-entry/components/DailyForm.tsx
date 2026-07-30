@@ -20,7 +20,7 @@ export default function DailyForm() {
   
   function handleSubmit() {
     const date = getCurrentDateFormatted()
-    saveEntry({values, comment}, date);
+    saveEntry({values, comment, date});
   }
   
   // Default ratings to 5 

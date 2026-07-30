@@ -4,8 +4,8 @@ import { Entry } from "../types/entry";
 import { getMonthDateRange } from "../util/getMonthDateRange";
 import { mapRowsToEntries } from "../util/mapRowsToEntries";
 
-export async function saveEntry(entry: CreateEntry, date: string): Promise<Entry> {
-  const { values, comment } = entry;
+export async function saveEntry(entry: CreateEntry): Promise<Entry> {
+  const { values, comment, date } = entry;
 
   // Create the entry
   const result = await db.runAsync(

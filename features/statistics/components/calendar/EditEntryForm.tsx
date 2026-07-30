@@ -38,8 +38,8 @@ export default function EditEntryForm({ entry, onSaved }: Props) {
       {
         values,
         comment,
+        date: entry.created_at
       },
-      entry.created_at
     );
 
     onSaved();

@@ -3,11 +3,11 @@ import { checkEntryExistsByDate } from "../repositories/entryRepository";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 
-export async function saveEntry(entry: CreateEntry, date: string): Promise<Entry> {
+export async function saveEntry(entry: CreateEntry): Promise<Entry> {
   
   for (const [key, value] of Object.entries(entry.values)) {
     if (value < 1 || value > 10) {
-      throw new Error("Ratings must be between 1 and 10")
+      throw new Error("Ratings must be between 1 and 10");
     }
   }
   
@@ -20,7 +20,7 @@ export async function saveEntry(entry: CreateEntry, date: string): Promise<Entry
   const comment = raw === "" ? null : raw;
 
   // Only let one entry per day exist
-  const entryExists = await checkEntryExistsByDate(date);
+  const entryExists = await checkEntryExistsByDate(entry.date);
 
   if (entryExists) {
     throw new Error("An entry already exists for today");
@@ -31,8 +31,8 @@ export async function saveEntry(entry: CreateEntry, date: string): Promise<Entry
     comment,
   };
 
-  const savedEntry = await entryRepository.saveEntry(entryToSave, date);
-  return savedEntry 
+  const savedEntry = await entryRepository.saveEntry(entryToSave);
+  return savedEntry;
 }
 
 export async function getRecentEntries(amount: number): Promise<Entry[]> {
