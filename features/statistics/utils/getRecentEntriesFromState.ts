@@ -10,7 +10,7 @@ export function getRecentEntriesFromState(
   const result: Entry[] = [];
   const date = new Date();
 
-  const maxDaysToSearch = 365 * 5; // safety limit
+  const maxDaysToSearch = 365 * 20; // safety limit
 
   for (let i = 0; i < maxDaysToSearch; i++) {
     if (result.length >= amount) {

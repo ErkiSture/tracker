@@ -1,7 +1,7 @@
 import { db } from "./sqlite";
 
 export async function seedEntries() {
-  const amount = 10000;
+  const amount = 30;
 
   const metricNames = [
     "Mood",

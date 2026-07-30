@@ -138,6 +138,36 @@ export async function getEntriesByDateRange(start: string, end: string): Promise
 
   return mapRowsToEntries(result);
 }
+
+export async function getEntries(offset: number, limit: number): Promise<Entry[]> {
+    const result = await db.getAllAsync<EntryRow>(
+    `
+    SELECT
+      entries.id as entryId,
+      entries.comment,
+      entries.created_at,
+      metrics.id as metricId,
+      metrics.name,
+      entry_values.value
+    FROM (
+      SELECT *
+      FROM entries
+      ORDER BY created_at DESC
+      LIMIT ?
+      OFFSET ?
+    ) AS entries
+    LEFT JOIN entry_values
+      ON entry_values.entry_id = entries.id
+    LEFT JOIN metrics
+      ON entry_values.metric_id = metrics.id
+    ORDER BY entries.created_at DESC;
+    `,
+    [limit, offset]
+  );
+
+  // console.log("repo", offset, limit);
+  return mapRowsToEntries(result);
+}
   
 export async function getEntryById(id: number): Promise<Entry> {
   const result = await db.getAllAsync<EntryRow>(

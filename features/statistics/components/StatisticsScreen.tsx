@@ -3,8 +3,8 @@ import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Text } from "react-native";
-import CalendarView from "./calendar/CalendarView";
 import EntryHistory from "./History/EntryHistory";
+import CalendarView from "./calendar/CalendarView";
 
 export default function StatisticsScreen() {
   const { themeColors } = useTheme();

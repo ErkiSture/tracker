@@ -1,33 +1,45 @@
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import useRecentEntries from "../../hooks/useRecentEntries";
 import EntryHistoryItem from "./EntryHistoryItem";
+
+const LOAD_AMOUNT = 5
+const BASE_LOADED_AMOUNT = 5
 
 export default function EntryHistory() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const [ entriesAmount, setEntriesAmount ] = useState<number>(1);
-
-  const recentEntries = useRecentEntries(entriesAmount);
+  const [ entriesAmount, setEntriesAmount ] = useState<number>(BASE_LOADED_AMOUNT);
+  const { recentEntries, loading } = useRecentEntries(entriesAmount);
 
   function loadMore(){
-    setEntriesAmount(entriesAmount + 3);
+    setEntriesAmount(entriesAmount + LOAD_AMOUNT);
   }  
   
+  // Don't want to keep great numbers of entries rendered when leaving screen
   useFocusEffect(
     useCallback(() => {
       return () => {
-        setEntriesAmount(1);
+        setEntriesAmount(BASE_LOADED_AMOUNT);
+        setLoadedAll(false);
       };
     }, [])
   );
-  
+
+  const [ loadedAll, setLoadedAll ] = useState<boolean>(false);
+
+  useEffect(() => {
+    if ((recentEntries.length !== 0) && (recentEntries.length < entriesAmount) && !loading) {
+      setLoadedAll(true);
+    }
+  }, [loading])
+
   if (recentEntries.length === 0) return null;
- 
+  
   return (
     <View style={commonStyles.sectionCard}>
       <Text style={commonStyles.sectionTitle}>Entry History</Text>
@@ -39,9 +51,17 @@ export default function EntryHistory() {
           />
         ))}
       </View>
-      <Pressable style={commonStyles.button} onPress={loadMore}>
-        <Text style={commonStyles.buttonText}>Load more</Text>
-      </Pressable>
+
+      {!loadedAll && (
+        <Pressable
+          style={commonStyles.button}
+          onPress={loadMore}
+        >
+          <Text style={commonStyles.buttonText}>
+            Load more
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 }

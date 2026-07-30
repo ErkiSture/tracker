@@ -59,3 +59,7 @@ export async function getRecentEntries(amount: number): Promise<Entry[]> {
 export async function getEntriesByDateRange(start: string, end: string): Promise<Entry[]> {
   return await entryRepository.getEntriesByDateRange(start, end);
 }
+
+export async function getEntries(offset: number, limit: number): Promise<Entry[]>{
+  return await entryRepository.getEntries(offset, limit);
+}
