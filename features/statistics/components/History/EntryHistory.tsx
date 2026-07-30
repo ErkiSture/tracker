@@ -14,7 +14,6 @@ export default function EntryHistory() {
 
   const recentEntries = useRecentEntries(entriesAmount);
 
-  
   function loadMore(){
     setEntriesAmount(entriesAmount + 3);
   }  
