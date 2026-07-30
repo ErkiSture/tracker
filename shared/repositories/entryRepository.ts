@@ -110,7 +110,32 @@ export async function getRecentEntries(amount: number): Promise<Entry[]> {
       `,
       [amount]
     );
-    
+
+  return mapRowsToEntries(result);
+}
+
+export async function getEntriesByDateRange(start: string, end: string): Promise<Entry[]> {
+  const result = await db.getAllAsync<EntryRow>(
+    `
+    SELECT
+      entries.id as entryId,
+      entries.comment,
+      entries.created_at,
+      metrics.id as metricId,
+      metrics.name,
+      entry_values.value
+    FROM entries
+    LEFT JOIN entry_values
+      ON entry_values.entry_id = entries.id
+    LEFT JOIN metrics
+      ON entry_values.metric_id = metrics.id
+    WHERE created_at >= ?
+    AND created_at < ?
+    ORDER BY created_at DESC
+    `,
+    [start, end]
+  );
+
   return mapRowsToEntries(result);
 }
   

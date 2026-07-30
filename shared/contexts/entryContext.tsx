@@ -61,8 +61,6 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
 
   async function saveEntry(entry: CreateEntry) {
     const savedEntry = await entryService.saveEntry(entry);
-
-    // console.log(savedEntry);
     addEntriesToState([savedEntry]);
   }
 
