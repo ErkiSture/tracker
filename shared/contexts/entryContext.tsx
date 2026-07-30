@@ -27,6 +27,12 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
   const [ loadedMonths, setLoadedMonths ] = useState<Set<string>>(new Set());
   const [ recentLoaded, setRecentLoaded ] = useState(0);
 
+  // const entriesOrdered = useMemo<Entry[]>(() => {
+  //   return Object.values(entries).sort(
+  //     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  //   );
+  // }, [entries]);
+  
   function getMonthKey(year: number, month: number) {
     return `${year}-${String(month).padStart(2, "0")}`;
   }
@@ -84,6 +90,8 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
   }
 
   async function ensureRecentLoaded(amount: number) {
+    const start = performance.now();
+
     if (recentLoaded >= amount) {
       return;
     }
@@ -93,6 +101,8 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
     addEntriesToState(fetched);
 
     setRecentLoaded(fetched.length)
+    const end = performance.now();
+    console.log(`ensureRecentLoaded took ${end - start} ms`);
   }
 
   return (

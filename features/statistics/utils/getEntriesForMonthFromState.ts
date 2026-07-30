@@ -5,7 +5,7 @@ export function getEntriesForMonthFromState(
   year: number,
   month: number
 ): Entry[] {
-  const start = performance.now();
+  // const start = performance.now();
 
   const result: Entry[] = [];
 
@@ -21,8 +21,8 @@ export function getEntriesForMonthFromState(
     }
   }
 
-  const end = performance.now();
-  console.log(`getEntriesForMonthFromState took ${end - start} ms`);
+  // const end = performance.now();
+  // console.log(`getEntriesForMonthFromState took ${end - start} ms`);
 
   return result;
 }

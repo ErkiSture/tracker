@@ -1,29 +1,29 @@
 import { db } from "./sqlite";
 
 export async function seedEntries() {
-  const amount = 200;
+  const amount = 10000;
 
   const metricNames = [
     "Mood",
     "Energy",
-    "Productivity",
-    "Stress",
-    "Sleep",
-    "Exercise",
-    "Focus",
-    "Motivation",
-    "Happiness",
-    "Anxiety",
-    "Confidence",
-    "Creativity",
-    "Social",
-    "Nutrition",
-    "Hydration",
-    "Work",
-    "Study",
-    "Relaxation",
-    "Discipline",
-    "Patience",
+    // "Productivity",
+    // "Stress",
+    // "Sleep",
+    // "Exercise",
+    // "Focus",
+    // "Motivation",
+    // "Happiness",
+    // "Anxiety",
+    // "Confidence",
+    // "Creativity",
+    // "Social",
+    // "Nutrition",
+    // "Hydration",
+    // "Work",
+    // "Study",
+    // "Relaxation",
+    // "Discipline",
+    // "Patience",
   ];
 
   const metricIds: Record<string, number> = {};
