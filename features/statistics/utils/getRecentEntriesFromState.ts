@@ -1,13 +1,5 @@
 import { Entry } from "@/shared/types/entry";
-import getDateFormatted from "@/shared/util/getDateFormatted";
-
-function getDateFormattedFromDate(date: Date): string {
-  return getDateFormatted(
-    date.getFullYear(),
-    date.getMonth() + 1,
-    date.getDate()
-  );
-}
+import getDateFormattedFromDate from "@/shared/util/getDateFormattedFromDate";
 
 export function getRecentEntriesFromState(
   entries: Record<string, Entry>,
@@ -18,7 +10,7 @@ export function getRecentEntriesFromState(
   const result: Entry[] = [];
   const date = new Date();
 
-  const maxDaysToSearch = 365 * 2; // safety limit
+  const maxDaysToSearch = 365 * 5; // safety limit
 
   for (let i = 0; i < maxDaysToSearch; i++) {
     if (result.length >= amount) {

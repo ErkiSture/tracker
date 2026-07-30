@@ -2,6 +2,7 @@ import * as entryService from "@/shared/services/entryService";
 import { createContext, useContext, useState } from "react";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
+import getDateFormattedFromDate from "../util/getDateFormattedFromDate";
 
 type EntryContextType = {
   entries: Record<string, Entry>
@@ -87,20 +88,45 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
     console.log(`ensureMonthLoaded took ${end - start} ms`);
   }
 
+  // async function ensureRecentLoaded(amount: number) {
+  //   const start = performance.now();
+
+  //   if (recentLoaded >= amount) {
+  //     return;
+  //   }
+
+  //   const fetched = await entryService.getRecentEntries(amount);
+
+  //   addEntriesToState(fetched);
+  //   setRecentLoaded(fetched.length);
+
+
+  //   const end = performance.now();
+  //   console.log(`ensureRecentLoaded took ${end - start} ms`);
+  // }
+
   async function ensureRecentLoaded(amount: number) {
-    const start = performance.now();
+    const timerStart = performance.now();
 
     if (recentLoaded >= amount) {
       return;
     }
 
-    const fetched = await entryService.getRecentEntries(amount);
+    const start = new Date();
+    start.setDate(start.getDate() - amount);
+
+    const end = new Date();
+    end.setDate(start.getDate() - recentLoaded + 1);
+
+    const fetched = await entryService.getEntriesByDateRange(
+      getDateFormattedFromDate(start), 
+      getDateFormattedFromDate(end)
+    );
 
     addEntriesToState(fetched);
-
-    setRecentLoaded(fetched.length)
-    const end = performance.now();
-    console.log(`ensureRecentLoaded took ${end - start} ms`);
+    setRecentLoaded(amount);
+    const timerEnd = performance.now();
+    console.log(`ensureRecentLoaded took ${timerEnd - timerStart} ms`);
   }
 
   return (

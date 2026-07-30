@@ -1,7 +1,8 @@
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { useState } from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import useRecentEntries from "../../hooks/useRecentEntries";
 import EntryHistoryItem from "./EntryHistoryItem";
 
@@ -16,20 +17,28 @@ export default function EntryHistory() {
   if (recentEntries.length === 0) return null;
 
   function loadMore(){
-    setEntriesAmount(entriesAmount + 100);
-  }
- 
+    setEntriesAmount(entriesAmount + 3);
+  }  
+  
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setEntriesAmount(1);
+      };
+    }, [])
+  );
+
   return (
     <View style={commonStyles.sectionCard}>
       <Text style={commonStyles.sectionTitle}>Entry History</Text>
-      <FlatList
-        data={recentEntries}
-        scrollEnabled={false}
-        keyExtractor={(entry) => entry.id.toString()}
-        renderItem={({ item }) => (
-          <EntryHistoryItem entry={item} />
-        )}
-      />
+      <View>
+        {recentEntries.map(entry => (
+          <EntryHistoryItem
+            key={entry.id}
+            entry={entry}
+          />
+        ))}
+      </View>
       <Pressable style={commonStyles.button} onPress={loadMore}>
         <Text style={commonStyles.buttonText}>Load more</Text>
       </Pressable>
