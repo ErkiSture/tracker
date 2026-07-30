@@ -1,8 +1,6 @@
 import { db } from "@/shared/database/sqlite";
 import { Metric } from "../types/metric";
 
-const MAX_METRICS = 15;
-
 export async function getMetrics(): Promise<Metric[]> {
   const metrics = await db.getAllAsync<Metric>(`SELECT * FROM metrics`)
   return metrics

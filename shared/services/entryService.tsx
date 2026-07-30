@@ -1,5 +1,4 @@
 import * as entryRepository from "../repositories/entryRepository";
-import { checkEntryExistsByDate } from "../repositories/entryRepository";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 
@@ -20,7 +19,7 @@ export async function saveEntry(entry: CreateEntry): Promise<Entry> {
   const comment = raw === "" ? null : raw;
 
   // Only let one entry per day exist
-  const entryExists = await checkEntryExistsByDate(entry.date);
+  const entryExists = await entryRepository.checkEntryExistsByDate(entry.date);
 
   if (entryExists) {
     throw new Error("An entry already exists for today");
