@@ -1,6 +1,6 @@
+import { Metric } from "@/features/metrics/types/metric";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Metric } from "@/shared/types/metric";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import getCellColor from "../../utils/getCellColor";
 
@@ -11,7 +11,7 @@ type Props = {
   onPress: () => void;
 }
 
-export default function CalendarGridCell({key, rating, metric, onPress}: Props) {
+export default function CalendarGridCell({ rating, metric, onPress}: Props) {
   const { themeColors, themePreference } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
@@ -21,7 +21,8 @@ export default function CalendarGridCell({key, rating, metric, onPress}: Props) 
     <Pressable onPress={onPress}>
       <View style={[
         styles.cell,
-        { backgroundColor: color }
+        { backgroundColor: color },
+        commonStyles.center
       ]}>
         <Text style={commonStyles.text}>{rating}</Text>
       </View>

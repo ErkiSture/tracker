@@ -1,6 +1,6 @@
 export type CreateEntry = {
-  mood: number;
-  energy: number;
-  productivity: number;
-  comment: string | null;
+  values: Record<number, number>
+  comment: string
+  date: string
 }
+  

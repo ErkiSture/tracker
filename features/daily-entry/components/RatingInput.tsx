@@ -6,12 +6,14 @@ type Props = {
   label: string;
   value: number;
   onChange: (value: number) => void;
+  size: number
 };
 
 export default function RatingInput({
   label,
   value,
   onChange,
+  size
 }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
@@ -26,7 +28,11 @@ export default function RatingInput({
             onPress={() => onChange(number)}
             style={[
               styles.number,
-              { borderColor: themeColors.border },
+              { 
+                borderColor: themeColors.border,
+                width: size,
+                height: size
+              },
               value === number && { backgroundColor: themeColors.primary },
             ]}
           >
@@ -46,8 +52,6 @@ const styles = StyleSheet.create({
   },
 
   number: {
-    width: 30,
-    height: 30,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,

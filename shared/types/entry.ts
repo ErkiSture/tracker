@@ -1,7 +1,11 @@
+type EntryMetric = {
+  name: string
+  value: number
+}
+
 export type Entry = {
-  mood: number;
-  energy: number;
-  productivity: number;
-  comment: string | null;
-  created_at: any
+  id: number
+  comment: string
+  created_at: string
+  metrics: Record<number, EntryMetric>
 }

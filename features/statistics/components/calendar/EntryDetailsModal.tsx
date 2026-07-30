@@ -1,25 +1,52 @@
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Entry } from "@/shared/types/entry";
+import { Dispatch, SetStateAction, useState } from "react";
 import {
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import EditEntryForm from "./EditEntryForm";
 
 type Props = {
   entry: Entry | null;
-  onClose: () => void;
+  setSelectedEntry: Dispatch<SetStateAction<Entry | null>>;
 };
 
 export default function EntryDetailsModal({
   entry,
-  onClose,
+  setSelectedEntry,
 }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
+
+  const [ isEditing, setIsEditing ] = useState<boolean>(false);
+
+  const metricRows = [];
+
+  if (entry) {
+    for (const [metricId, metric] of Object.entries(entry.metrics)) {
+      metricRows.push(
+        <View key={metricId} style={commonStyles.row}>
+          <Text style={commonStyles.text}>{metric.name}</Text>
+          <Text style={commonStyles.text}>{metric.value}/10</Text>
+        </View>
+      );
+    }
+  }
+
+  function toggleEdit() {
+    setIsEditing(!isEditing);
+  }
+
+  function onClose() {
+    setIsEditing(false);
+    setSelectedEntry(null);
+  }
 
   return (
     <Modal
@@ -28,11 +55,13 @@ export default function EntryDetailsModal({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <Pressable
-        style={styles.backdrop}
-        onPress={onClose}
-      >
+      <View style={styles.backdrop}>
         <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+        />
+
+        <View
           style={[
             styles.card,
             {
@@ -40,50 +69,59 @@ export default function EntryDetailsModal({
               borderColor: themeColors.border,
             },
           ]}
-          onPress={() => {}}
         >
           {entry && (
-            <>
-              <Text style={[commonStyles.text, styles.title]}>
-                {entry.created_at}
-              </Text>
+            <ScrollView
+            contentContainerStyle={styles.content}
+            showsVerticalScrollIndicator
+            >
+              {isEditing ? (
+                <EditEntryForm entry={entry} onSaved={onClose}/>
+              ) : (
+                <>
+                  <View style={styles.header}>
+                    <Text style={[commonStyles.text, styles.title]}>
+                      {entry.created_at}
+                    </Text>
 
-              <View style={styles.row}>
-                <Text style={commonStyles.text}>Mood</Text>
-                <Text style={commonStyles.text}>{entry.mood}/10</Text>
-              </View>
+                    <View style={[commonStyles.row, { gap: 14 }]}>
+                      <Pressable onPress={toggleEdit}>
+                        <Text style={[commonStyles.text, commonStyles.textButtonText]}>Edit</Text>
+                      </Pressable>
 
-              <View style={styles.row}>
-                <Text style={commonStyles.text}>Energy</Text>
-                <Text style={commonStyles.text}>{entry.energy}/10</Text>
-              </View>
+                      <Pressable>
+                        <Text style={[commonStyles.text, commonStyles.textButtonText]}>Remove</Text>
+                      </Pressable>
+                    </View>
+                  </View>
 
-              <View style={styles.row}>
-                <Text style={commonStyles.text}>Productivity</Text>
-                <Text style={commonStyles.text}>{entry.productivity}/10</Text>
-              </View>
+                  {metricRows}
 
-              <Text style={[commonStyles.text, styles.commentTitle]}>
-                Comment
-              </Text>
+                  <Text style={[commonStyles.text, styles.commentTitle]}>
+                    Comment
+                  </Text>
 
-              <Text style={commonStyles.text}>
-                {entry.comment ?? "No comment"}
-              </Text>
+                  <Text style={commonStyles.text}>
+                    {entry.comment ?? "No comment"}
+                  </Text>
 
-              <Pressable
-                style={[
-                  styles.closeButton,
-                  { backgroundColor: themeColors.primary },
-                ]}
-                onPress={onClose}
-              >
-                <Text style={styles.closeText}>Close</Text>
-              </Pressable>
-            </>
+                  <Pressable
+                    style={[
+                      styles.closeButton,
+                      { backgroundColor: themeColors.primary },
+                    ]}
+                    onPress={onClose}
+                  >
+                    <Text style={styles.closeText}>Close</Text>
+                  </Pressable>
+                </>
+                )
+              }
+
+            </ScrollView>
           )}
-        </Pressable>
-      </Pressable>
+        </View>
+      </View>
     </Modal>
   );
 }
@@ -98,8 +136,18 @@ const styles = StyleSheet.create({
 
   card: {
     width: "85%",
+    maxHeight: "65%",
     borderRadius: 16,
     borderWidth: 1,
+    overflow: "hidden",
+  },
+
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+
+  content: {
     padding: 20,
     gap: 12,
   },
@@ -108,11 +156,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     marginBottom: 8,
-  },
-
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
 
   commentTitle: {

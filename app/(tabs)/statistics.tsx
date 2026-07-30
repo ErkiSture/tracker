@@ -1,25 +1,32 @@
-import CalendarView from "@/features/statistics/components/calendar/CalendarView";
+import StatisticsScreen from "@/features/statistics/components/StatisticsScreen";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { useState } from "react";
-import { Text, View } from "react-native";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useRef } from "react";
+import { ScrollView } from "react-native";
 
 export default function Statistics() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
+  
+  const scrollRef = useRef<ScrollView>(null);
 
-  const [calendarProps, setCalendarProps] = useState({
-    month: new Date().getMonth() + 1,
-    year: new Date().getFullYear(),
-    metric: "mood",
-  });
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        scrollRef.current?.scrollTo({
+          y: 0,
+          animated: false,
+        });
+      };
+    }, [])
+  );
 
   return (
     <>
-      <View style= {commonStyles.screenContainer}>
-        <Text style= {commonStyles.title}>Stats</Text>
-        <CalendarView></CalendarView>
-      </View>
+      <ScrollView ref={scrollRef} style= {commonStyles.screenContainer}>
+        <StatisticsScreen></StatisticsScreen>
+      </ScrollView>
     </>
   );
 }

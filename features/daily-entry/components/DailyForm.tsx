@@ -1,50 +1,75 @@
+import { useMetrics } from "@/features/metrics/contexts/metricContext";
+import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
-import { seedEntries } from "@/shared/database/seedEntries";
 import { createCommonStyles } from "@/shared/styles/common";
-import { useState } from "react";
-import { Pressable, Text } from "react-native";
-import { resetDatabase } from "../../../shared/storage/entryRepository";
-import { useDailyEntry } from "../hooks/useDailyEntry";
-import { useEntries } from "../hooks/useEntries";
+import getCurrentDateFormatted from "@/shared/util/getCurrentDateFormatted";
+import { useEffect, useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import CommentInput from "./CommentInput";
 import RatingInput from "./RatingInput";
 
 export default function DailyForm() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
-
-  const [mood, setMood] = useState<number>(5);
-  const [energy, setEnergy] = useState<number>(5);
-  const [productivity, setProductivity] = useState<number>(5);
+  
   const [comment, setComment] = useState<string>("");
+  const [values, setValues] = useState<Record<number, number>>({})
 
-  const { saveDailyEntry } = useDailyEntry();
-
-  const { getAllEntries } = useEntries();
-
+  const { saveEntry } = useEntries()
+  const { metrics } = useMetrics()
+  
   function handleSubmit() {
-    saveDailyEntry({ mood, energy, productivity, comment });
+    const date = getCurrentDateFormatted()
+    saveEntry({values, comment, date});
+  }
+  
+  // Default ratings to 5 
+  useEffect(() => {
+    if (metrics.length === 0) return;
+
+    setValues(
+      Object.fromEntries(
+        metrics.map(metric => [metric.id, 5])
+      )
+    )
+  }, [metrics])
+
+  function updateValue(metricId: number, value: number) {
+    setValues(prev => ({
+      ...prev,
+      [metricId]: value
+    }));
+  }
+
+  // Create rating row for each metric
+  const ratingInputs = []
+  for (let i = 0; i < metrics.length; i++) {
+
+    const metricId = metrics[i].id
+    const metricName = metrics[i].name
+    const value = values[metricId]
+
+    ratingInputs.push(
+      <RatingInput
+        key={metricId}
+        label={metricName}
+        value={value}
+        onChange={(newValue) => updateValue(metricId, newValue)}
+        size={30}
+      />
+    )
   }
 
   return (
-    <>
+    <View style={{
+      gap: 20
+    }}>
       <Text style={commonStyles.title}>How was your day?</Text>
-      <RatingInput label="Mood" value={mood} onChange={setMood} />
-      <RatingInput label="Energy" value={energy} onChange={setEnergy} />
-      <RatingInput label="Productivity" value={productivity} onChange={setProductivity} />
+        {ratingInputs}
       <CommentInput comment={comment} setComment={setComment} />
       <Pressable style={commonStyles.button} onPress={handleSubmit}>
         <Text style={commonStyles.buttonText}>Save</Text>
       </Pressable>
-      <Pressable style={commonStyles.button} onPress={getAllEntries}>
-        <Text style={commonStyles.buttonText}>log all</Text>
-      </Pressable>
-      <Pressable style={commonStyles.button} onPress={resetDatabase}>
-        <Text style={commonStyles.buttonText}>reset db</Text>
-      </Pressable>
-      <Pressable style={commonStyles.button} onPress={seedEntries}>
-        <Text style={commonStyles.buttonText}>Seed database</Text>
-      </Pressable>
-    </>
+    </View>
   );
 }

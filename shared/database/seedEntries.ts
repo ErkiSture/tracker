@@ -1,45 +1,132 @@
-// database/seedEntries.ts
 import { db } from "./sqlite";
 
 export async function seedEntries() {
-  const year = 2026;
-  const month = 7; // July (1-12)
+  const amount = 10000;
 
-  const daysInMonth = new Date(year, month, 0).getDate();
+  const metricNames = [
+    "Mood",
+    "Energy",
+    // "Productivity",
+    // "Stress",
+    // "Sleep",
+    // "Exercise",
+    // "Focus",
+    // "Motivation",
+    // "Happiness",
+    // "Anxiety",
+    // "Confidence",
+    // "Creativity",
+    // "Social",
+    // "Nutrition",
+    // "Hydration",
+    // "Work",
+    // "Study",
+    // "Relaxation",
+    // "Discipline",
+    // "Patience",
+  ];
 
-  const entries = Array.from({ length: daysInMonth }, (_, i) => {
-    const day = i + 1;
+  const metricIds: Record<string, number> = {};
 
-    return {
-      mood: Math.floor(Math.random() * 10) + 1,
-      energy: Math.floor(Math.random() * 10) + 1,
-      productivity: Math.floor(Math.random() * 10) + 1,
-      comment: `Entry for ${year}-${month}-${day}`,
-      created_at: `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
-    };
-  });
-
-  for (const entry of entries) {
+  for (const name of metricNames) {
     await db.runAsync(
       `
-      INSERT INTO entries (
-        mood,
-        energy,
-        productivity,
-        comment,
-        created_at
-      )
-      VALUES (?, ?, ?, ?, ?)
+      INSERT OR IGNORE INTO metrics (name)
+      VALUES (?)
       `,
-      [
-        entry.mood,
-        entry.energy,
-        entry.productivity,
-        entry.comment,
-        entry.created_at,
-      ]
+      [name]
     );
+
+    const metric = await db.getFirstAsync<{ id: number }>(
+      `
+      SELECT id FROM metrics WHERE name = ?
+      `,
+      [name]
+    );
+
+    if (metric) {
+      metricIds[name] = metric.id;
+    }
   }
 
-  console.log(`Seeded ${entries.length} entries`);
+  const metrics = Object.values(metricIds);
+
+  const placeholders = metrics
+    .map(() => "(?, ?, ?)")
+    .join(", ");
+
+  const start = performance.now();
+
+  await db.execAsync("BEGIN TRANSACTION");
+
+  try {
+    const date = new Date();
+
+    // Start from yesterday (not today)
+    date.setDate(date.getDate() - 1);
+
+    let created = 0;
+
+    while (created < amount) {
+      // Randomly skip days (around 30% chance of no entry)
+      const shouldSkip = Math.random() < 0.3;
+
+      if (!shouldSkip) {
+        
+        const createdAt = [
+          date.getFullYear(),
+          String(date.getMonth() + 1).padStart(2, "0"),
+          String(date.getDate()).padStart(2, "0"),
+        ].join("-");
+
+        const result = await db.runAsync(
+          `
+          INSERT INTO entries (
+            comment,
+            created_at
+          )
+          VALUES (?, ?)
+          `,
+          [
+            `Generated entry ${created + 1}`,
+            createdAt,
+          ]
+        );
+
+        const entryId = result.lastInsertRowId;
+
+        const values = metrics.flatMap(metricId => [
+          entryId,
+          metricId,
+          Math.floor(Math.random() * 10) + 1,
+        ]);
+
+        await db.runAsync(
+          `
+          INSERT INTO entry_values (
+            entry_id,
+            metric_id,
+            value
+          )
+          VALUES ${placeholders}
+          `,
+          values
+        );
+
+        created++;
+      }
+
+      // Always move backwards one day
+      date.setDate(date.getDate() - 1);
+    }
+
+    await db.execAsync("COMMIT");
+
+    console.log(
+      `Seeded ${amount} entries in ${(performance.now() - start).toFixed(0)}ms`
+    );
+  } catch (error) {
+    await db.execAsync("ROLLBACK");
+    throw error;
+  }
 }

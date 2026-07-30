@@ -1,11 +1,10 @@
+import { Metric } from "@/features/metrics/types/metric";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Entry } from "@/shared/types/entry";
-import { Metric } from "@/shared/types/metric";
-import { useFocusEffect } from "expo-router";
-import { useCallback, useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import useGetEntries from "../../hooks/useGetEntries";
+import useMonthEntries from "../../hooks/useMonthEntries";
 import { getDaysInMonth, mapEntriesByDay } from "../../utils/calendar";
 import CalendarGridCell from "./CalendarGridCell";
 import EntryDetailsModal from "./EntryDetailsModal";
@@ -21,43 +20,29 @@ export default function CalendarGrid({ month, year, metric }: Props) {
   const commonStyles = createCommonStyles(themeColors);
   
   const [ selectedEntry, setSelectedEntry] = useState<Entry | null>(null);
-  const [ entries, setEntries ] = useState<Entry[] | null>(null);
-  const { getMonthEntries } = useGetEntries()
-  
-  async function loadEntries() {
-    const entries = await getMonthEntries(year, month);
-    setEntries(entries);
-  }
-  
-  useEffect(() => {
-    loadEntries();
-  }, [month, year])
-  
-  // Cells are reloaded on page visit since a new entry might have been added
-  useFocusEffect(
-    useCallback(() => {
-      loadEntries();
-    }, [])
-  );  
-  
-  const daysInMonth = getDaysInMonth(year, month)
-  const entryMap = mapEntriesByDay(entries ?? []);
-  const cells = [];
-  
-  if (entries) {
-    // Create cells for the grid
-    for (let day = 1; day <= daysInMonth; day++) {
-      const entry = entryMap.get(day);
 
-      cells.push(
-        <CalendarGridCell 
-          key={day} 
-          rating={entry?.[metric] ?? null} 
-          metric={metric}
-          onPress={() => setSelectedEntry(entry ?? null)}
-        />
-      );
-    }
+  const monthEntries = useMonthEntries(year, month)
+
+  const entryMap = useMemo(
+    () => mapEntriesByDay(monthEntries),
+    [monthEntries]
+  );
+
+  const daysInMonth = getDaysInMonth(year, month);
+  
+  const cells = [];
+  // Create cells for the grid
+  for (let day = 1; day <= daysInMonth; day++) {
+    const entry = entryMap.get(day);
+
+    cells.push(
+      <CalendarGridCell 
+        key={day} 
+        rating={entry?.metrics[metric.id]?.value ?? null}
+        metric={metric}
+        onPress={() => setSelectedEntry(entry ?? null)}
+      />
+    );
   }
 
   return (
@@ -67,7 +52,7 @@ export default function CalendarGrid({ month, year, metric }: Props) {
       </View>
       <EntryDetailsModal
         entry={selectedEntry}
-        onClose={() => setSelectedEntry(null)}
+        setSelectedEntry={setSelectedEntry}
       />
     </>
   )
