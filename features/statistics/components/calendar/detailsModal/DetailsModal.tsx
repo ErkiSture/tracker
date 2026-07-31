@@ -1,3 +1,5 @@
+import CreateEntryForm from "@/features/entries/components/CreateEntryForm";
+import EditEntryForm from "@/features/entries/components/EditEntryForm";
 import useEntryActions from "@/features/entries/hooks/useEntryActions";
 import { Entry } from "@/features/entries/types/entry";
 import ConfirmModal from "@/shared/components/confirmModal";
@@ -12,24 +14,55 @@ import {
   Text,
   View,
 } from "react-native";
-import EditEntryForm from "./EditEntryForm";
+import DetailsHeader from "./DetailsHeader";
 
 type Props = {
   entry: Entry | null;
   setSelectedEntry: Dispatch<SetStateAction<Entry | null>>;
+  showDetails: boolean;
+  setShowDetails: (value: boolean) => void
+  date: string
 };
 
-export default function EntryDetailsModal({
+export default function DetailsModal({
   entry,
   setSelectedEntry,
+  showDetails,
+  setShowDetails,
+  date
 }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
   const { removeEntry } = useEntryActions();
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+  const [ isEditing, setIsEditing ] = useState<boolean>(false);
+  const [ isCreating, setIsCreating ] = useState<boolean>(false)
+  const [ showConfirm, setShowConfirm ] = useState<boolean>(false);
+
+  function toggleEdit() {
+    setIsEditing(prev => !prev);
+  }
+  
+  function toggleCreate() {
+    setIsCreating(prev => !prev);
+  }
+  
+  function onClose() {
+    setIsEditing(false);
+    setIsCreating(false);
+    setSelectedEntry(null);
+    setShowDetails(false);
+  }
+  
+  async function handleRemove() {
+    if (!entry) return;
+    
+    await removeEntry(entry);
+    
+    setShowConfirm(false);
+    onClose();
+  }
 
   const metricRows = [];
 
@@ -48,29 +81,11 @@ export default function EntryDetailsModal({
       );
     }
   }
-
-  function toggleEdit() {
-    setIsEditing(prev => !prev);
-  }
-
-  function onClose() {
-    setIsEditing(false);
-    setSelectedEntry(null);
-  }
-
-  async function handleRemove() {
-    if (!entry) return;
-
-    await removeEntry(entry);
-
-    setShowConfirm(false);
-    onClose();
-  }
-
+  
   return (
     <>
       <Modal
-        visible={entry !== null}
+        visible={showDetails}
         transparent
         animationType="fade"
         onRequestClose={onClose}
@@ -103,51 +118,10 @@ export default function EntryDetailsModal({
                   />
                 ) : (
                   <>
-                    <View style={[commonStyles.row, { justifyContent: "space-between", alignItems: "center"}]}>
-                      <Text style={commonStyles.sectionTitle}>
-                        {entry.created_at}
-                      </Text>
-
-                      <View style={[commonStyles.row,{ gap: 14 }]}>
-                        <Pressable onPress={toggleEdit}>
-                          <Text
-                            style={[
-                              commonStyles.text,
-                              commonStyles.textButtonText,
-                            ]}
-                          >
-                            Edit
-                          </Text>
-                        </Pressable>
-
-                        <Pressable onPress={() => setShowConfirm(true)}>
-                          <Text
-                            style={[
-                              commonStyles.text,
-                              commonStyles.textButtonText,
-                            ]}
-                          >
-                            Remove
-                          </Text>
-                        </Pressable>
-                      </View>
-                    </View>
-
+                    <DetailsHeader entry={entry} toggleEdit={toggleEdit} setShowConfirm={setShowConfirm}></DetailsHeader>
                     {metricRows}
-
-                    <Text
-                      style={[
-                        commonStyles.text,
-                        styles.commentTitle,
-                      ]}
-                    >
-                      Comment
-                    </Text>
-
-                    <Text style={commonStyles.text}>
-                      {entry.comment || "No comment"}
-                    </Text>
-
+                    <Text style={[commonStyles.text, styles.commentTitle]}>Comment</Text>
+                    <Text style={commonStyles.text}>{entry.comment || "No comment"}</Text>
                     <Pressable
                       style={[
                         styles.closeButton,
@@ -158,14 +132,47 @@ export default function EntryDetailsModal({
                       ]}
                       onPress={onClose}
                     >
-                      <Text style={styles.closeText}>
-                        Close
-                      </Text>
+                      <Text style={styles.closeText}>Close</Text>
                     </Pressable>
                   </>
                 )}
               </ScrollView>
             )}
+
+            {!entry && (
+
+              <ScrollView
+                contentContainerStyle={styles.content}
+                showsVerticalScrollIndicator
+              >
+                <>
+                  {isCreating ? (
+                    <CreateEntryForm date={date} onSaved={onClose} toggleCreate={toggleCreate}/>
+                  ) : (
+                    <>
+                      <View style={[commonStyles.row, { justifyContent: "space-between", alignItems: "center"}]}>
+                        <Text style={commonStyles.sectionTitle}>
+                          {date}
+                        </Text>
+                      </View>
+                      <Text>No entry has been saved this date</Text>
+                      <Pressable onPress={toggleCreate}>
+                        <Text
+                          style={[
+                            commonStyles.text,
+                            commonStyles.textButtonText,
+                          ]}
+                        >
+                          Create entry
+                        </Text>
+                      </Pressable>
+                    </>
+                  )}
+                </>
+              </ScrollView>
+
+            )}
+
           </View>
         </View>
       </Modal>
