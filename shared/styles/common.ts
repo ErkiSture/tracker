@@ -87,7 +87,6 @@ export const createCommonStyles = (themeColors: ThemeColors) => {
       color: themeColors.text,
       fontSize: 20,
       fontWeight: "600",
-      marginBottom: 12,
     },
 
     sectionCard: {

@@ -99,25 +99,16 @@ export default function EntryDetailsModal({
                   <EditEntryForm
                     entry={entry}
                     onSaved={onClose}
+                    toggleEdit={toggleEdit}
                   />
                 ) : (
                   <>
-                    <View style={styles.header}>
-                      <Text
-                        style={[
-                          commonStyles.text,
-                          commonStyles.sectionTitle,
-                        ]}
-                      >
+                    <View style={[commonStyles.row, { justifyContent: "space-between", alignItems: "center"}]}>
+                      <Text style={commonStyles.sectionTitle}>
                         {entry.created_at}
                       </Text>
 
-                      <View
-                        style={[
-                          commonStyles.row,
-                          { gap: 14 },
-                        ]}
-                      >
+                      <View style={[commonStyles.row,{ gap: 14 }]}>
                         <Pressable onPress={toggleEdit}>
                           <Text
                             style={[
@@ -129,9 +120,7 @@ export default function EntryDetailsModal({
                           </Text>
                         </Pressable>
 
-                        <Pressable
-                          onPress={() => setShowConfirm(true)}
-                        >
+                        <Pressable onPress={() => setShowConfirm(true)}>
                           <Text
                             style={[
                               commonStyles.text,

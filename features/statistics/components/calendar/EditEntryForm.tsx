@@ -11,9 +11,10 @@ import { Pressable, Text, View } from "react-native";
 type Props = {
   entry: Entry;
   onSaved: () => void;
+  toggleEdit: () => void;
 };
 
-export default function EditEntryForm({ entry, onSaved }: Props) {
+export default function EditEntryForm({ entry, onSaved, toggleEdit }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
@@ -62,9 +63,23 @@ export default function EditEntryForm({ entry, onSaved }: Props) {
 
   return (
     <View style={[{ gap: 20 }]}>
-      <Text style={commonStyles.title}>
-        Edit entry
-      </Text>
+      <View style={[commonStyles.row, { justifyContent: "space-between", alignItems: "center" }]}>
+        <Text style={commonStyles.sectionTitle}>
+          Edit entry
+        </Text>
+        
+        <Pressable onPress={toggleEdit}>
+          <Text
+            style={[
+              commonStyles.text,
+              commonStyles.textButtonText,
+            ]}
+          >
+            Cancel
+          </Text>
+        </Pressable>
+
+      </View>
 
       {ratingInputs}
 
