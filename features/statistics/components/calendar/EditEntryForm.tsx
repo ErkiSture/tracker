@@ -1,8 +1,8 @@
 import CommentInput from "@/features/daily-entry/components/CommentInput";
 import RatingInput from "@/features/daily-entry/components/RatingInput";
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
-import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
+import useEntryActions from "@/shared/hooks/useEntryActions";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Entry } from "@/shared/types/entry";
 import { useState } from "react";
@@ -18,7 +18,7 @@ export default function EditEntryForm({ entry, onSaved, toggleEdit }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { updateEntry } = useEntries();
+  const { updateEntry } = useEntryActions();
   const { metrics } = useMetrics();
 
   const [comment, setComment] = useState(entry.comment);

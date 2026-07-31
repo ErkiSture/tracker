@@ -1,5 +1,4 @@
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
-import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { seedEntries } from "@/shared/database/seedEntries";
 import { resetDatabase } from "@/shared/repositories/entryRepository";
@@ -11,8 +10,6 @@ export default function DevButtons() {
   const commonStyles = createCommonStyles(themeColors);
 
   const { refreshMetrics } = useMetrics()
-
-  const {  } = useEntries()
 
   return (
     <View style={commonStyles.sectionCard}>

@@ -1,6 +1,6 @@
 import ConfirmModal from "@/shared/components/confirmModal";
-import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
+import useEntryActions from "@/shared/hooks/useEntryActions";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Entry } from "@/shared/types/entry";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -26,7 +26,7 @@ export default function EntryDetailsModal({
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { removeEntry } = useEntries();
+  const { removeEntry } = useEntryActions();
 
   const [isEditing, setIsEditing] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);

@@ -1,6 +1,6 @@
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
-import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
+import useEntryActions from "@/shared/hooks/useEntryActions";
 import { createCommonStyles } from "@/shared/styles/common";
 import getCurrentDateFormatted from "@/shared/util/getCurrentDateFormatted";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ export default function DailyForm() {
   
   const date = getCurrentDateFormatted();
 
-  const { saveEntry } = useEntries();
+  const { saveEntry } = useEntryActions();
   const entryAlreadyExistsForToday = useEntryExistsDate(date)
   const { metrics } = useMetrics();
   
