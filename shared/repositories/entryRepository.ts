@@ -13,22 +13,19 @@ type EntryRow = {
   value: number | null
 }
 
-export async function saveEntry(entry: CreateEntry): Promise<Entry> {
+async function insertEntryAndValues(entry: CreateEntry): Promise<number> {
   const { values, comment, date } = entry;
 
-  // Create the entry
   const result = await db.runAsync(
     `
     INSERT INTO entries (comment, created_at)
     VALUES (?, ?)
-
-    `, 
+    `,
     [comment, date]
-  ); 
+  );
 
   const entryId = result.lastInsertRowId;
 
-  // Add metric values
   for (const [metricId, value] of Object.entries(values)) {
     await db.runAsync(
       `
@@ -38,14 +35,26 @@ export async function saveEntry(entry: CreateEntry): Promise<Entry> {
         value
       )
       VALUES (?, ?, ?)
-      `, 
+      `,
       [entryId, metricId, value]
     );
   }
-  
-  const savedEntry = await getEntryById(entryId);
-  
-  return savedEntry;
+
+  return entryId;
+}
+
+export async function saveEntry(entry: CreateEntry): Promise<Entry> {
+  let entryId: number | null = null;
+
+  await db.withTransactionAsync(async () => {
+    entryId = await insertEntryAndValues(entry)
+  });
+
+  if (entryId === null) {
+    throw new Error("Failed to create entry");
+  }
+
+  return getEntryById(entryId); 
 }
 
 export async function removeEntry(id: number): Promise<boolean> {
@@ -59,6 +68,33 @@ export async function removeEntry(id: number): Promise<boolean> {
   
   return result.changes > 0;
 }
+
+export async function updateEntry(id: number, entry: CreateEntry): Promise<Entry> {
+  let newEntryId: number | null = null;
+
+  await db.withTransactionAsync(async () => {
+    const deleted = await db.runAsync(
+      `
+      DELETE FROM entries
+      WHERE id = ?
+      `,
+      [id]
+    );
+
+    if (deleted.changes === 0) {
+      throw new Error(`Entry ${id} does not exist`);
+    }
+
+    newEntryId = await insertEntryAndValues(entry);
+  });
+
+  if (newEntryId === null) {
+    throw new Error("Failed to update entry");
+  }
+
+  return getEntryById(newEntryId);
+}
+
 
 export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
   const { start, end } = getMonthDateRange(year, month);

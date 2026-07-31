@@ -40,6 +40,10 @@ export async function removeEntry(id: number): Promise<void> {
   }
 }
 
+export async function updateEntry(id: number, entry: CreateEntry): Promise<Entry> {
+  return await entryRepository.updateEntry(id, entry);
+}
+
 export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
   if (month < 1 || month > 12) {
     throw new Error("Invalid month");

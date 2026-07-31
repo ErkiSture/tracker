@@ -7,6 +7,7 @@ type EntryContextType = {
   entries: Record<string, Entry>
   saveEntry: (entry: CreateEntry) => Promise<void>
   removeEntry: (id: number) => Promise<void>
+  updateEntry: (id: number, entry: CreateEntry) => Promise<void>
   resetEntries: () => void
   ensureMonthLoaded: (year: number, month: number) => Promise<void>
   ensureRecentLoaded: (amount: number) => Promise<void>
@@ -17,6 +18,7 @@ const entryContext = createContext<EntryContextType>({
   entries: {},
   saveEntry: async () => {},
   removeEntry: async () => {},
+  updateEntry: async () => {},
   resetEntries: () => {},
   ensureMonthLoaded: async () => {},
   ensureRecentLoaded: async () => {},
@@ -65,6 +67,11 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
     const savedEntry = await entryService.saveEntry(entry);
     addEntriesToState([savedEntry]);
   }
+  
+  async function updateEntry(id: number, entry: CreateEntry) {
+    const updatedEntry = await entryService.updateEntry(id, entry);
+    addEntriesToState([updatedEntry]);
+  }
 
   async function ensureMonthLoaded(year: number, month: number) {
     const monthKey = getMonthKey(year, month);
@@ -90,7 +97,6 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
   }
 
   async function ensureRecentLoaded(amount: number) {
-    
     if (recentLoaded >= amount) {
       return;
     }
@@ -106,11 +112,10 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
 
     addEntriesToState(fetched);
     setRecentLoaded(amount);
-
   }
 
   return (
-    <entryContext.Provider value={{ entries, saveEntry, removeEntry, ensureMonthLoaded, ensureRecentLoaded, resetEntries, entriesOrdered }}>
+    <entryContext.Provider value={{ entries, saveEntry, removeEntry, updateEntry, ensureMonthLoaded, ensureRecentLoaded, resetEntries, entriesOrdered }}>
       {children}
     </entryContext.Provider>
   )

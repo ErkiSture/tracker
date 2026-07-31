@@ -17,7 +17,7 @@ export default function EditEntryForm({ entry, onSaved }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { removeEntry, saveEntry } = useEntries();
+  const { updateEntry } = useEntries();
   const { metrics } = useMetrics();
 
   const [comment, setComment] = useState(entry.comment);
@@ -32,15 +32,11 @@ export default function EditEntryForm({ entry, onSaved }: Props) {
   });  
   
   async function handleSubmit() {
-    await removeEntry(entry.id);
-
-    await saveEntry(
-      {
-        values,
-        comment,
-        date: entry.created_at
-      },
-    );
+    await updateEntry(entry.id, {
+      values,
+      comment,
+      date: entry.created_at
+    });
 
     onSaved();
   }
