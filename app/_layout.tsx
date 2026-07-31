@@ -1,5 +1,5 @@
+import EntryProvider from "@/features/entries/contexts/entryContext";
 import { MetricProvider } from "@/features/metrics/contexts/metricContext";
-import EntryProvider from "@/shared/contexts/entryContext";
 import { ThemeProvider } from "@/shared/contexts/themeContext";
 import setUpDatabase from "@/shared/database/sqlite";
 import { Stack } from "expo-router";

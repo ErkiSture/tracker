@@ -1,7 +1,7 @@
+import { Entry } from "@/features/entries/types/entry";
 import { Metric } from "@/features/metrics/types/metric";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Entry } from "@/shared/types/entry";
 import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import useMonthEntries from "../../hooks/useMonthEntries";

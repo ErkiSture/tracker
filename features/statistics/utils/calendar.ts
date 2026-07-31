@@ -1,4 +1,4 @@
-import { Entry } from "@/shared/types/entry";
+import { Entry } from "@/features/entries/types/entry";
 
 export function getDaysInMonth(year: number, month: number) {
   return new Date(year, month, 0).getDate();

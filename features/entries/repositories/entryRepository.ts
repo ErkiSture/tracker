@@ -1,8 +1,8 @@
 import setUpDatabase, { db } from "@/shared/database/sqlite";
+import { getMonthDateRange } from "../../../shared/util/getMonthDateRange";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
-import { getMonthDateRange } from "../util/getMonthDateRange";
-import { mapRowsToEntries } from "../util/mapRowsToEntries";
+import { mapRowsToEntries } from "../utils/mapRowsToEntries";
 
 type EntryRow = {
   entryId: number

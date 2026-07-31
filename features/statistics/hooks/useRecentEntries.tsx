@@ -1,5 +1,5 @@
+import { useEntries } from "@/features/entries/contexts/entryContext";
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
-import { useEntries } from "@/shared/contexts/entryContext";
 import { useEffect, useMemo, useState } from "react";
 import { getRecentEntriesFromState } from "../utils/getRecentEntriesFromState";
 

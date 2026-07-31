@@ -1,6 +1,6 @@
+import { Entry } from "@/features/entries/types/entry";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Entry } from "@/shared/types/entry";
 import { StyleSheet, Text, View } from "react-native";
 
 type Props = {

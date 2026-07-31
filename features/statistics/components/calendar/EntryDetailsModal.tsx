@@ -1,8 +1,8 @@
+import useEntryActions from "@/features/entries/hooks/useEntryActions";
+import { Entry } from "@/features/entries/types/entry";
 import ConfirmModal from "@/shared/components/confirmModal";
 import { useTheme } from "@/shared/contexts/themeContext";
-import useEntryActions from "@/shared/hooks/useEntryActions";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Entry } from "@/shared/types/entry";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   Modal,

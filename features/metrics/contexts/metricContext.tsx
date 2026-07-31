@@ -1,6 +1,6 @@
-import { useEntries } from "@/shared/contexts/entryContext";
+import { useEntries } from "@/features/entries/contexts/entryContext";
 import { createContext, useContext, useEffect, useState } from "react";
-import * as metricService from "../service/metricService";
+import * as metricService from "../services/metricService";
 import { Metric } from "../types/metric";
 
 type MetricContextType = {

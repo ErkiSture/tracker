@@ -1,6 +1,6 @@
+import { useEntries } from "@/features/entries/contexts/entryContext";
+import { Entry } from "@/features/entries/types/entry";
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
-import { useEntries } from "@/shared/contexts/entryContext";
-import { Entry } from "@/shared/types/entry";
 import { useEffect, useMemo } from "react";
 import { getEntriesForMonthFromState } from "../utils/getEntriesForMonthFromState";
 

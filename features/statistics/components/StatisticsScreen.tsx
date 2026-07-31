@@ -1,5 +1,5 @@
+import { useEntries } from "@/features/entries/contexts/entryContext";
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
-import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Text } from "react-native";

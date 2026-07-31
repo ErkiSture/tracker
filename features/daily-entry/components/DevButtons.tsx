@@ -1,7 +1,7 @@
+import { resetDatabase } from "@/features/entries/repositories/entryRepository";
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { seedEntries } from "@/shared/database/seedEntries";
-import { resetDatabase } from "@/shared/repositories/entryRepository";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Pressable, Text, View } from "react-native";
 

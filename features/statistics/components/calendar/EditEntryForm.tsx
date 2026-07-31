@@ -1,10 +1,10 @@
 import CommentInput from "@/features/daily-entry/components/CommentInput";
 import RatingInput from "@/features/daily-entry/components/RatingInput";
+import useEntryActions from "@/features/entries/hooks/useEntryActions";
+import { Entry } from "@/features/entries/types/entry";
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
 import { useTheme } from "@/shared/contexts/themeContext";
-import useEntryActions from "@/shared/hooks/useEntryActions";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Entry } from "@/shared/types/entry";
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 

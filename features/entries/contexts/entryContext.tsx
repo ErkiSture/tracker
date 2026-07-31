@@ -1,4 +1,4 @@
-import * as entryService from "@/shared/services/entryService";
+import * as entryService from "@/features/entries/services/entryService";
 import { createContext, useContext, useMemo, useState } from "react";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";

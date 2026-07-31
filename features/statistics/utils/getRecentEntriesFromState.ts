@@ -34,7 +34,7 @@
 
 
 
-import { Entry } from "@/shared/types/entry";
+import { Entry } from "@/features/entries/types/entry";
 
 export function getRecentEntriesFromState(
   entriesOrdered: Entry[],

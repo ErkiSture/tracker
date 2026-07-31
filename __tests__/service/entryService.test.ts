@@ -1,5 +1,5 @@
-import * as entryRepository from "@/shared/repositories/entryRepository";
-import { saveEntry } from "@/shared/services/entryService";
+import * as entryRepository from "@/features/entries/repositories/entryRepository";
+import { saveEntry } from "@/features/entries/services/entryService";
 
 const mockedRepository = entryRepository as jest.Mocked<typeof entryRepository>
 

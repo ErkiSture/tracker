@@ -1,4 +1,4 @@
-import { useEntries } from "@/shared/contexts/entryContext";
+import { useEntries } from "@/features/entries/contexts/entryContext";
 import { useEffect, useState } from "react";
 
 export default function useEntryExistsDate(date: string): boolean {
