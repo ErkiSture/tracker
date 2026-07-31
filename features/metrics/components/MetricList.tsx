@@ -4,17 +4,16 @@ import MetricItem from "./MetricItem";
 
 type Props = {
   metrics: Metric[];
-  onRemove: (id: number) => Promise<void>;
 };
 
-export default function MetricList({ metrics, onRemove }: Props) {
+export default function MetricList({ metrics }: Props) {
   return (
     <View style={styles.container}>
       {metrics.map((metric) => (
         <MetricItem
           key={metric.id}
+          id={metric.id}
           metric={metric}
-          onRemove={onRemove}
         />
       ))}
     </View>

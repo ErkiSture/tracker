@@ -10,7 +10,7 @@ export default function MetricManager() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { metrics, addMetric, removeMetric } = useMetrics();
+  const { metrics, addMetric } = useMetrics();
 
   const [newMetric, setNewMetric] = useState("");
 
@@ -35,7 +35,6 @@ export default function MetricManager() {
 
       <MetricList
         metrics={metrics}
-        onRemove={removeMetric}
       />
     </View>
   );
