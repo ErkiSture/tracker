@@ -1,3 +1,5 @@
+import ConfirmModal from "@/shared/components/confirmModal";
+import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Entry } from "@/shared/types/entry";
@@ -24,7 +26,10 @@ export default function EntryDetailsModal({
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const [ isEditing, setIsEditing ] = useState<boolean>(false);
+  const { removeEntry } = useEntries();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const metricRows = [];
 
@@ -32,15 +37,20 @@ export default function EntryDetailsModal({
     for (const [metricId, metric] of Object.entries(entry.metrics)) {
       metricRows.push(
         <View key={metricId} style={commonStyles.row}>
-          <Text style={commonStyles.text}>{metric.name}</Text>
-          <Text style={commonStyles.text}>{metric.value}/10</Text>
+          <Text style={commonStyles.text}>
+            {metric.name}
+          </Text>
+
+          <Text style={commonStyles.text}>
+            {metric.value}/10
+          </Text>
         </View>
       );
     }
   }
 
   function toggleEdit() {
-    setIsEditing(!isEditing);
+    setIsEditing(prev => !prev);
   }
 
   function onClose() {
@@ -48,92 +58,142 @@ export default function EntryDetailsModal({
     setSelectedEntry(null);
   }
 
-  return (
-    <Modal
-      visible={entry !== null}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-    >
-      <View style={styles.backdrop}>
-        <Pressable
-          style={StyleSheet.absoluteFill}
-          onPress={onClose}
-        />
+  async function handleRemove() {
+    if (!entry) return;
 
-        <View
-          style={[
-            styles.card,
-            {
-              backgroundColor: themeColors.surface,
-              borderColor: themeColors.border,
-            },
-          ]}
-        >
-          {entry && (
-            <ScrollView
-            contentContainerStyle={styles.content}
-            showsVerticalScrollIndicator
-            >
-              {isEditing ? (
-                <EditEntryForm entry={entry} onSaved={onClose}/>
-              ) : (
-                <>
-                  <View style={styles.header}>
-                    <Text style={[commonStyles.text, styles.title]}>
-                      {entry.created_at}
+    await removeEntry(entry);
+
+    setShowConfirm(false);
+    onClose();
+  }
+
+  return (
+    <>
+      <Modal
+        visible={entry !== null}
+        transparent
+        animationType="fade"
+        onRequestClose={onClose}
+      >
+        <View style={commonStyles.modalBackdrop}>
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={onClose}
+          />
+
+          <View
+            style={[
+              styles.card,
+              {
+                backgroundColor: themeColors.surface,
+                borderColor: themeColors.border,
+              },
+            ]}
+          >
+            {entry && (
+              <ScrollView
+                contentContainerStyle={styles.content}
+                showsVerticalScrollIndicator
+              >
+                {isEditing ? (
+                  <EditEntryForm
+                    entry={entry}
+                    onSaved={onClose}
+                  />
+                ) : (
+                  <>
+                    <View style={styles.header}>
+                      <Text
+                        style={[
+                          commonStyles.text,
+                          commonStyles.sectionTitle,
+                        ]}
+                      >
+                        {entry.created_at}
+                      </Text>
+
+                      <View
+                        style={[
+                          commonStyles.row,
+                          { gap: 14 },
+                        ]}
+                      >
+                        <Pressable onPress={toggleEdit}>
+                          <Text
+                            style={[
+                              commonStyles.text,
+                              commonStyles.textButtonText,
+                            ]}
+                          >
+                            Edit
+                          </Text>
+                        </Pressable>
+
+                        <Pressable
+                          onPress={() => setShowConfirm(true)}
+                        >
+                          <Text
+                            style={[
+                              commonStyles.text,
+                              commonStyles.textButtonText,
+                            ]}
+                          >
+                            Remove
+                          </Text>
+                        </Pressable>
+                      </View>
+                    </View>
+
+                    {metricRows}
+
+                    <Text
+                      style={[
+                        commonStyles.text,
+                        styles.commentTitle,
+                      ]}
+                    >
+                      Comment
                     </Text>
 
-                    <View style={[commonStyles.row, { gap: 14 }]}>
-                      <Pressable onPress={toggleEdit}>
-                        <Text style={[commonStyles.text, commonStyles.textButtonText]}>Edit</Text>
-                      </Pressable>
+                    <Text style={commonStyles.text}>
+                      {entry.comment || "No comment"}
+                    </Text>
 
-                      <Pressable>
-                        <Text style={[commonStyles.text, commonStyles.textButtonText]}>Remove</Text>
-                      </Pressable>
-                    </View>
-                  </View>
-
-                  {metricRows}
-
-                  <Text style={[commonStyles.text, styles.commentTitle]}>
-                    Comment
-                  </Text>
-
-                  <Text style={commonStyles.text}>
-                    {entry.comment ?? "No comment"}
-                  </Text>
-
-                  <Pressable
-                    style={[
-                      styles.closeButton,
-                      { backgroundColor: themeColors.primary },
-                    ]}
-                    onPress={onClose}
-                  >
-                    <Text style={styles.closeText}>Close</Text>
-                  </Pressable>
-                </>
-                )
-              }
-
-            </ScrollView>
-          )}
+                    <Pressable
+                      style={[
+                        styles.closeButton,
+                        {
+                          backgroundColor:
+                            themeColors.primary,
+                        },
+                      ]}
+                      onPress={onClose}
+                    >
+                      <Text style={styles.closeText}>
+                        Close
+                      </Text>
+                    </Pressable>
+                  </>
+                )}
+              </ScrollView>
+            )}
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+
+      <ConfirmModal
+        visible={showConfirm}
+        title="Delete entry?"
+        message="Are you sure you want to delete this entry? This cannot be undone."
+        confirmText="Delete"
+        onCancel={() => setShowConfirm(false)}
+        onConfirm={handleRemove}
+      />
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.4)",
-  },
-
   card: {
     width: "85%",
     maxHeight: "65%",
@@ -144,18 +204,12 @@ const styles = StyleSheet.create({
 
   header: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
 
   content: {
     padding: 20,
     gap: 12,
-  },
-
-  title: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginBottom: 8,
   },
 
   commentTitle: {

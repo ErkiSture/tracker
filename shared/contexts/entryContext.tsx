@@ -6,7 +6,7 @@ import { Entry } from "../types/entry";
 type EntryContextType = {
   entries: Record<string, Entry>
   saveEntry: (entry: CreateEntry) => Promise<void>
-  removeEntry: (id: number) => Promise<void>
+  removeEntry: (entry: Entry) => Promise<void>
   updateEntry: (id: number, entry: CreateEntry) => Promise<void>
   resetEntries: () => void
   ensureMonthLoaded: (year: number, month: number) => Promise<void>
@@ -53,14 +53,27 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
     }));
   };
 
+  const removeEntriesFromState = (entries: Entry[]) => {
+    setEntries(prev => {
+      const updated = { ...prev };
+
+      for (const entry of entries) {
+        delete updated[entry.created_at];
+      }
+
+      return updated;
+    });
+  }
+
   function resetEntries() {
     setLoadedMonths(new Set());
     setRecentLoaded(0);
     setEntries({});
   }
 
-  async function removeEntry(id: number) {
-    await entryService.removeEntry(id)
+  async function removeEntry(entry: Entry) {
+    await entryService.removeEntry(entry.id);
+    removeEntriesFromState([entry]);
   }
 
   async function saveEntry(entry: CreateEntry) {

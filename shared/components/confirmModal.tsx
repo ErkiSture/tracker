@@ -31,7 +31,7 @@ export default function ConfirmModal({
       animationType="fade"
       onRequestClose={onCancel}
     >
-      <View style={styles.backdrop}>
+      <View style={commonStyles.modalBackdrop}>
         <Pressable
           style={StyleSheet.absoluteFill}
           onPress={onCancel}
@@ -87,13 +87,6 @@ export default function ConfirmModal({
 }
 
 const styles = StyleSheet.create({
-  backdrop: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.4)",
-  },
-
   card: {
     width: "80%",
     padding: 20,
