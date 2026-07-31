@@ -67,3 +67,7 @@ export async function getEntriesByDateRange(start: string, end: string): Promise
 export async function getEntries(offset: number, limit: number): Promise<Entry[]>{
   return await entryRepository.getEntries(offset, limit);
 }
+
+export async function checkEntryExistsByDate(date: string): Promise<boolean>{
+  return await entryRepository.checkEntryExistsByDate(date);
+}

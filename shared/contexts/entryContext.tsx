@@ -11,6 +11,7 @@ type EntryContextType = {
   resetEntries: () => void
   ensureMonthLoaded: (year: number, month: number) => Promise<void>
   ensureRecentLoaded: (amount: number) => Promise<void>
+  checkEntryExistsByDate: (date: string) => Promise<boolean>
   entriesOrdered: Entry[]
 }
 
@@ -22,6 +23,7 @@ const entryContext = createContext<EntryContextType>({
   resetEntries: () => {},
   ensureMonthLoaded: async () => {},
   ensureRecentLoaded: async () => {},
+  checkEntryExistsByDate: async () => false,
   entriesOrdered: []
 })
 
@@ -106,7 +108,6 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
       updated.add(monthKey);
       return updated;
     });
-
   }
 
   async function ensureRecentLoaded(amount: number) {
@@ -127,8 +128,12 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
     setRecentLoaded(amount);
   }
 
+  async function checkEntryExistsByDate(date: string): Promise<boolean> {
+    return await entryService.checkEntryExistsByDate(date);
+  }
+
   return (
-    <entryContext.Provider value={{ entries, saveEntry, removeEntry, updateEntry, ensureMonthLoaded, ensureRecentLoaded, resetEntries, entriesOrdered }}>
+    <entryContext.Provider value={{ entries, saveEntry, removeEntry, updateEntry, ensureMonthLoaded, ensureRecentLoaded, resetEntries, checkEntryExistsByDate, entriesOrdered }}>
       {children}
     </entryContext.Provider>
   )

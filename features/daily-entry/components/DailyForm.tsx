@@ -5,21 +5,25 @@ import { createCommonStyles } from "@/shared/styles/common";
 import getCurrentDateFormatted from "@/shared/util/getCurrentDateFormatted";
 import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import useEntryExistsDate from "../hooks/useEntryExistsToday";
 import CommentInput from "./CommentInput";
+import DailyCompleted from "./DailyCompleted";
 import RatingInput from "./RatingInput";
 
 export default function DailyForm() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
   
-  const [comment, setComment] = useState<string>("");
-  const [values, setValues] = useState<Record<number, number>>({})
+  const [ comment, setComment ] = useState<string>("");
+  const [ values, setValues ] = useState<Record<number, number>>({})
+  
+  const date = getCurrentDateFormatted();
 
-  const { saveEntry } = useEntries()
-  const { metrics } = useMetrics()
+  const { saveEntry } = useEntries();
+  const entryAlreadyExistsForToday = useEntryExistsDate(date)
+  const { metrics } = useMetrics();
   
   function handleSubmit() {
-    const date = getCurrentDateFormatted()
     saveEntry({values, comment, date});
   }
   
@@ -31,7 +35,7 @@ export default function DailyForm() {
       Object.fromEntries(
         metrics.map(metric => [metric.id, 5])
       )
-    )
+    );
   }, [metrics])
 
   function updateValue(metricId: number, value: number) {
@@ -61,15 +65,21 @@ export default function DailyForm() {
   }
 
   return (
-    <View style={{
-      gap: 20
-    }}>
-      <Text style={commonStyles.title}>How was your day?</Text>
-        {ratingInputs}
-      <CommentInput comment={comment} setComment={setComment} />
-      <Pressable style={commonStyles.button} onPress={handleSubmit}>
-        <Text style={commonStyles.buttonText}>Save</Text>
-      </Pressable>
-    </View>
+    <>
+      { entryAlreadyExistsForToday ? (
+        <DailyCompleted/>
+      ) : (
+        <View style={{
+          gap: 20
+        }}>
+          <Text style={commonStyles.title}>How was your day?</Text>
+            {ratingInputs}
+          <CommentInput comment={comment} setComment={setComment} />
+          <Pressable style={commonStyles.button} onPress={handleSubmit}>
+            <Text style={commonStyles.buttonText}>Save</Text>
+          </Pressable>
+        </View>
+      )}
+    </>
   );
 }
