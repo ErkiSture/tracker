@@ -67,15 +67,17 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
   }
 
   async function ensureMonthLoaded(year: number, month: number) {
-    const start = performance.now();
     const monthKey = getMonthKey(year, month);
-
+    
     // Already loaded, don't query again
     if (loadedMonths.has(monthKey)) {
       return;
     }
-
+    
+    const start = performance.now();
     const entries = await entryService.getMonthEntries(year, month);
+    const end = performance.now();
+    console.log(`ensureMonthLoaded took ${end - start} ms`);
 
     addEntriesToState(entries);
 
@@ -85,28 +87,26 @@ export default function EntryProvider({ children }: { children: React.ReactNode}
       return updated;
     });
 
-    const end = performance.now();
-    console.log(`ensureMonthLoaded took ${end - start} ms`);
   }
 
   async function ensureRecentLoaded(amount: number) {
-    const timerStart = performance.now();
     
     if (recentLoaded >= amount) {
       return;
     }
     
     // console.log("context offset", recentLoaded, "context limit", amount - recentLoaded)
+    const timerStart = performance.now();
     const fetched = await entryService.getEntries(
       recentLoaded,
       amount - recentLoaded
     );
+    const timerEnd = performance.now();
+    console.log(`ensureRecentLoaded took ${timerEnd - timerStart} ms`);
 
     addEntriesToState(fetched);
     setRecentLoaded(amount);
 
-    const timerEnd = performance.now();
-    console.log(`ensureRecentLoaded took ${timerEnd - timerStart} ms`);
   }
 
   return (

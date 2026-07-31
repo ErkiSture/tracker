@@ -5,7 +5,7 @@ import { useEffect, useMemo } from "react";
 import { getEntriesForMonthFromState } from "../utils/getEntriesForMonthFromState";
 
 export default function useMonthEntries(year: number, month: number): Entry[] {
-  const { entries, ensureMonthLoaded } = useEntries();
+  const { entries, ensureMonthLoaded, ensureRecentLoaded } = useEntries();
   const { metrics } = useMetrics()
 
   useEffect(() => {

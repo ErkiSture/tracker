@@ -19,6 +19,7 @@ export default function CommentInput({ comment, setComment }: Props) {
       <TextInput 
         style={commonStyles.textInput} 
         placeholder="Enter your comment..." 
+        value={comment}
         onChangeText={(text) => setComment(text)}
       />
     </View>

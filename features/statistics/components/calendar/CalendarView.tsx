@@ -9,6 +9,7 @@ import CalendarHeader from "./CalendarHeader";
 import DropDownMenu from "./DropDownMenu";
 
 export default function CalendarView() {
+  console.log("CalendarView render");
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 

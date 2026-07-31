@@ -3,8 +3,8 @@ import { useEntries } from "@/shared/contexts/entryContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { Text } from "react-native";
-import EntryHistory from "./History/EntryHistory";
 import CalendarView from "./calendar/CalendarView";
+import EntryHistory from "./History/EntryHistory";
 
 export default function StatisticsScreen() {
   const { themeColors } = useTheme();
@@ -20,17 +20,15 @@ export default function StatisticsScreen() {
   //Instead, returns nothing if no entries are found
   return (
     <>
-        
       { hasMetrics && (
         <CalendarView/>
-        )}
+      )}
 
       <EntryHistory/> 
 
       { !hasEntries && !hasMetrics && (
         <Text style= {commonStyles.text}>Create a metric and save your daily form to see statistics</Text>
       )}
-      
     </>
   )
 }

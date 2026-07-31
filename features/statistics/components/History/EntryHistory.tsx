@@ -10,6 +10,7 @@ const LOAD_AMOUNT = 5
 const BASE_LOADED_AMOUNT = 5
 
 export default function EntryHistory() {
+  console.log("EntryHistory render");
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
