@@ -10,6 +10,7 @@ type MetricContextType = {
   refreshMetrics: () => Promise<void>
   addMetric: (name: string) => Promise<void>
   removeMetric: (id: number) => Promise<void>
+  renameMetric: (id: number, newName: string) => Promise<void>
   toggleMetricStatus: (id: number) => Promise<void>
 }
 
@@ -20,6 +21,7 @@ const MetricContext = createContext<MetricContextType>({
   refreshMetrics: async () => {},
   addMetric: async () => {},
   removeMetric: async () => {},
+  renameMetric: async () => {},
   toggleMetricStatus: async () => {}
 })
 
@@ -55,12 +57,17 @@ export function MetricProvider({ children }: { children: React.ReactNode }) {
     refreshMetrics();
   }
 
+  async function renameMetric(id: number, newName: string) {
+    await metricService.renameMetric(id, newName);
+    refreshMetrics();
+  }
+
   useEffect(() => {
     refreshMetrics();
   }, [])
   
   return (
-    <MetricContext.Provider value={{ metrics, activeMetrics, inactiveMetrics, refreshMetrics, addMetric, removeMetric, toggleMetricStatus }}>
+    <MetricContext.Provider value={{ metrics, activeMetrics, inactiveMetrics, refreshMetrics, addMetric, removeMetric, renameMetric, toggleMetricStatus }}>
       {children}
     </MetricContext.Provider>
   )

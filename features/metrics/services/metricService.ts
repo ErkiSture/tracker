@@ -40,3 +40,8 @@ export async function removeMetric(id: number): Promise<void> {
 export async function toggleMetricStatus(id: number) {
   await metricRepository.toggleMetricStatus(id);
 }
+
+export async function renameMetric(id: number, newName: string): Promise<void> {
+  const trimmedName = newName.trim();
+  await metricRepository.renameMetric(id, trimmedName);
+}

@@ -42,7 +42,6 @@ export default function MetricManager() {
       <MetricList
         metrics={inactiveMetrics}
       />
-
     </View>
   );
 }

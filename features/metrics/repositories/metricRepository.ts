@@ -72,3 +72,14 @@ export async function toggleMetricStatus(id: number) {
     [newStatus, id]
   );
 }
+
+export async function renameMetric(id: number, newName: string): Promise<void> {
+  await db.runAsync(
+    `
+    UPDATE metrics
+    SET name = ?
+    WHERE id = ?
+    `,
+    [newName, id]
+  );
+}
