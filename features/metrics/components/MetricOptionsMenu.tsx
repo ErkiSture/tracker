@@ -9,7 +9,7 @@ import {
   MenuOptions,
   MenuTrigger,
 } from "react-native-popup-menu";
-import { useMetrics } from "../contexts/metricContext";
+import useMetricActions from "../hooks/useMetricActions";
 import { Metric } from "../types/metric";
 import RenameMetricModal from "./RenameMetricModal";
 
@@ -25,7 +25,7 @@ export default function MetricOptionsMenu({
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { removeMetric, renameMetric, toggleMetricStatus } = useMetrics();
+  const { removeMetric, updateMetric, toggleMetricStatus, error } = useMetricActions();
 
   const [showRemoveConfirmModal, setShowRemoveConfirmModal] = useState(false);
   const [showRenameModal, setShowRenameModal] = useState(false);
@@ -104,17 +104,19 @@ export default function MetricOptionsMenu({
           removeMetric(id);
           setShowRemoveConfirmModal(false);
         }}
+        error={error}
       />
 
       <RenameMetricModal
         visible={showRenameModal}
         initialName={metric.name}
-        onSave={(newName) => {
-          renameMetric(id, newName);
+        onSave={async (newName) => {
+          await updateMetric(id, newName);
           setShowRenameModal(false);
         }}
         onCancel={() => setShowRenameModal(false)}
-      />
+        error={error}
+      />  
     </>
   );
 }

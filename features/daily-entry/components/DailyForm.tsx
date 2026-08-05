@@ -19,7 +19,7 @@ export default function DailyForm() {
   
   const date = getCurrentDateFormatted();
 
-  const { saveEntry } = useEntryActions();
+  const { saveEntry, error } = useEntryActions();
   const entryAlreadyExistsForToday = useEntryExistsDate(date)
   const { activeMetrics } = useMetrics();
   
@@ -78,6 +78,7 @@ export default function DailyForm() {
           <Pressable style={commonStyles.button} onPress={handleSubmit}>
             <Text style={commonStyles.buttonText}>Save</Text>
           </Pressable>
+          {error !== null && (<Text style={commonStyles.errorText}>{error.message}</Text>)}
         </View>
       )}
     </>

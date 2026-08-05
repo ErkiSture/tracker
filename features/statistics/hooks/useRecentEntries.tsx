@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getRecentEntriesFromState } from "../utils/getRecentEntriesFromState";
 
 export default function useRecentEntries(amount: number) {
-  const { entries, ensureRecentLoaded, ensureMonthLoaded,entriesOrdered } = useEntries();
+  const { ensureRecentLoaded, entriesOrdered } = useEntries();
   const { metrics } = useMetrics();
   const [ loading, setLoading ] = useState<boolean>(false);
 

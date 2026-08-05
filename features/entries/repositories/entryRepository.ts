@@ -58,15 +58,8 @@ export async function saveEntry(entry: CreateEntry): Promise<Entry> {
 }
 
 export async function removeEntry(id: number): Promise<boolean> {
-  const result = await db.runAsync(
-    `
-    DELETE FROM entries
-    WHERE id = ?
-    `,
-    [id]
-  );
-  
-  return result.changes > 0;
+  throw new Error("removeEntry is deprecated. Use deleteEntry instead.");
+
 }
 
 export async function updateEntry(id: number, entry: CreateEntry): Promise<Entry> {

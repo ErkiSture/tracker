@@ -16,9 +16,8 @@ export default function useEntryActions() {
   async function saveEntry(entry: CreateEntry) {
     try {
       setLoading(true);
-      setError(null);
-
       await save(entry);
+      setError(null);
     } catch (err) {
       setError(err as Error);
       throw err;
@@ -30,9 +29,8 @@ export default function useEntryActions() {
   async function removeEntry(entry: Entry) {
     try {
       setLoading(true);
-      setError(null);
-
       await remove(entry);
+      setError(null);
     } catch (err) {
       setError(err as Error);
       throw err;
@@ -44,9 +42,8 @@ export default function useEntryActions() {
   async function updateEntry(id: number, entry: CreateEntry) {
     try {
       setLoading(true);
-      setError(null);
-
       await update(id, entry);
+      setError(null);
     } catch (err) {
       setError(err as Error);
       throw err;
@@ -59,6 +56,7 @@ export default function useEntryActions() {
     saveEntry,
     removeEntry,
     updateEntry,
+    setError,
     loading,
     error,
   };

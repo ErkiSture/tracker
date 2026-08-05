@@ -4,7 +4,10 @@ import EntryForm from "@/features/entries/components/EntryForm";
 import useEntryActions from "@/features/entries/hooks/useEntryActions";
 import { Entry } from "@/features/entries/types/entry";
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
+import { useTheme } from "@/shared/contexts/themeContext";
+import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
+import { Text } from "react-native";
 
 type Props = {
   entry: Entry;
@@ -17,7 +20,10 @@ export default function EditEntryForm({
   onSaved,
   toggleEdit,
 }: Props) {
-  const { updateEntry } = useEntryActions();
+  const { themeColors } = useTheme();
+  const commonStyles = createCommonStyles(themeColors);
+
+  const { updateEntry, error } = useEntryActions();
   const { activeMetrics } = useMetrics();
 
   const [comment, setComment] = useState(entry.comment);
@@ -49,14 +55,17 @@ export default function EditEntryForm({
   }
 
   return (
-    <EntryForm
-      title="Edit entry"
-      values={values}
-      comment={comment}
-      onChangeValue={updateValue}
-      onChangeComment={setComment}
-      onSubmit={handleSubmit}
-      onCancel={toggleEdit}
-    />
+    <>
+      <EntryForm
+        title="Edit entry"
+        values={values}
+        comment={comment}
+        onChangeValue={updateValue}
+        onChangeComment={setComment}
+        onSubmit={handleSubmit}
+        onCancel={toggleEdit}
+      />
+    <Text style={commonStyles.errorText}>{error?.message}</Text>
+    </>
   );
 }

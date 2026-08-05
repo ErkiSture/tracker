@@ -34,7 +34,7 @@ export default function DetailsModal({
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { removeEntry } = useEntryActions();
+  const { removeEntry, error, setError } = useEntryActions();
 
   const [ isEditing, setIsEditing ] = useState<boolean>(false);
   const [ isCreating, setIsCreating ] = useState<boolean>(false)
@@ -53,6 +53,7 @@ export default function DetailsModal({
     setIsCreating(false);
     setSelectedEntry(null);
     setShowDetails(false);
+    setError(null);
   }
   
   async function handleRemove() {
@@ -184,6 +185,7 @@ export default function DetailsModal({
         confirmText="Delete"
         onCancel={() => setShowConfirm(false)}
         onConfirm={handleRemove}
+        error={error}
       />
     </>
   );

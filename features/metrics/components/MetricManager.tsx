@@ -3,6 +3,7 @@ import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useMetrics } from "../contexts/metricContext";
+import useMetricActions from "../hooks/useMetricActions";
 import AddMetricForm from "./AddMetricForm";
 import MetricList from "./MetricList";
 
@@ -10,7 +11,8 @@ export default function MetricManager() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { activeMetrics, inactiveMetrics, addMetric } = useMetrics();
+  const { activeMetrics, inactiveMetrics } = useMetrics();
+  const { createMetric, error } = useMetricActions();
 
   const [newMetric, setNewMetric] = useState("");
 
@@ -19,7 +21,7 @@ export default function MetricManager() {
 
     if (!name) return;
 
-    await addMetric(name);
+    await createMetric(name);
     setNewMetric("");
   }
 
@@ -32,6 +34,11 @@ export default function MetricManager() {
         onChange={setNewMetric}
         onSubmit={handleAddMetric}
       />
+      {error?.message && (
+        <Text style={commonStyles.errorText}>
+          {error.message}
+        </Text>
+      )}
 
       <Text style={commonStyles.sectionTitle}>Active metrics</Text>
       <MetricList

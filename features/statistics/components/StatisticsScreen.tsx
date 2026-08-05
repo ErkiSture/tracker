@@ -10,10 +10,10 @@ export default function StatisticsScreen() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { metrics } = useMetrics()
+  const { activeMetrics } = useMetrics()
   const { entries } = useEntries();
 
-  const hasMetrics = metrics.length > 0;
+  const hasMetrics = activeMetrics.length > 0;
   const hasEntries = Object.keys(entries).length > 0;
   
   //Can't wrap EntryHistory in hasEntries check because then it wouldn't be able to check for metric changes(since it wouldn't be loaded)

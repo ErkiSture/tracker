@@ -37,7 +37,7 @@ export async function removeMetric(id: number): Promise<boolean> {
     `,
     [id]
   );
-
+  
   return result.changes > 0
 }
 

@@ -17,7 +17,7 @@ export async function addMetric(name: string): Promise<void> {
   // Check that metric with same name doesn't already exist
   const exists = await metricRepository.metricExists(trimmedName);
   if (exists) {
-    throw new Error("Metric already exists");
+    throw new Error("Metric with that name already exists");
   }
 
   // Limit number of metrics
@@ -43,5 +43,10 @@ export async function toggleMetricStatus(id: number) {
 
 export async function renameMetric(id: number, newName: string): Promise<void> {
   const trimmedName = newName.trim();
+
+  if (!trimmedName) {
+    throw new Error("Metric name cannot be empty");
+  }
+
   await metricRepository.renameMetric(id, trimmedName);
 }

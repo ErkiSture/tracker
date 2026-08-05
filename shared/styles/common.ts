@@ -9,6 +9,13 @@ export const createCommonStyles = (themeColors: ThemeColors) => {
       lineHeight: 22,
     },
 
+    errorText: {
+      color: "#d32f2f",
+      fontSize: 16,
+      lineHeight: 22,
+      fontWeight: "600",
+    },
+
     title: {
       color: themeColors.text,
       fontSize: 28,

@@ -10,6 +10,7 @@ type Props = {
   cancelText?: string;
   onConfirm: () => void;
   onCancel: () => void;
+  error?: { message: string } | null;
 };
 
 export default function ConfirmModal({
@@ -20,6 +21,7 @@ export default function ConfirmModal({
   cancelText = "Cancel",
   onConfirm,
   onCancel,
+  error,
 }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
@@ -53,6 +55,12 @@ export default function ConfirmModal({
           <Text style={commonStyles.text}>
             {message}
           </Text>
+
+          {error?.message && (
+            <Text style={commonStyles.errorText}>
+              {error.message}
+            </Text>
+          )}
 
           <View style={[commonStyles.row, styles.buttons]}>
             <Pressable

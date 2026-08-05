@@ -8,6 +8,7 @@ type Props = {
   initialName: string;
   onSave: (name: string) => void;
   onCancel: () => void;
+  error?: { message: string } | null;
 };
 
 export default function RenameMetricModal({
@@ -15,6 +16,7 @@ export default function RenameMetricModal({
   initialName,
   onSave,
   onCancel,
+  error,
 }: Props) {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
@@ -58,6 +60,12 @@ export default function RenameMetricModal({
             onChangeText={setName}
             autoFocus
           />
+
+          {error?.message && (
+            <Text style={commonStyles.errorText}>
+              {error.message}
+            </Text>
+          )}
 
           <View style={[commonStyles.row, { gap: 12 }]}>
             <Pressable
