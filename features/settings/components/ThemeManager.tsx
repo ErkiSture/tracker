@@ -1,33 +1,74 @@
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
+const themes = ["light", "dark", "system"] as const;
 
 export default function Settings() {
-  const { themeColors, changeTheme } = useTheme();
+  const { themeColors, themePreference, changeTheme } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
   return (
     <View style={commonStyles.sectionCard}>
-      <Pressable
-        style={commonStyles.button}
-        onPress={() => changeTheme("light")}
-      >
-        <Text style={commonStyles.buttonText}>Light</Text>
-      </Pressable>
+      <Text style={commonStyles.sectionTitle}>
+        Theme
+      </Text>
 
-      <Pressable
-        style={commonStyles.button}
-        onPress={() => changeTheme("dark")}
-      >
-        <Text style={commonStyles.buttonText}>Dark</Text>
-      </Pressable>
+      <View style={styles.options}>
+        {themes.map((option) => (
+          <Pressable
+            key={option}
+            style={[
+              styles.row,
+              {
+                borderColor: themeColors.border,
+                backgroundColor: themeColors.surface,
+              },
+            ]}
+            onPress={() => changeTheme(option)}
+          >
+            <Text style={commonStyles.text}>
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+            </Text>
 
-      <Pressable
-        style={commonStyles.button}
-        onPress={() => changeTheme("system")}
-      >
-        <Text style={commonStyles.buttonText}>System</Text>
-      </Pressable>
+            <View
+              style={[
+                styles.radio,
+                {
+                  borderColor: themeColors.border,
+                },
+                themePreference === option && {
+                  backgroundColor: themeColors.primary,
+                  borderColor: themeColors.primary,
+                },
+              ]}
+            />
+          </Pressable>
+        ))}
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  options: {
+    gap: 10,
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderRadius: 12,
+  },
+
+  radio: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 2,
+  },
+});
