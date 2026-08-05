@@ -26,7 +26,7 @@ export default function EntryForm({
   onCancel
 }: Props) {
 
-  const { metrics } = useMetrics();
+  const { activeMetrics } = useMetrics();
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
@@ -51,7 +51,7 @@ export default function EntryForm({
       </View>
 
 
-      {metrics.map(metric => (
+      {activeMetrics.map(metric => (
         <RatingInput
           key={metric.id}
           label={metric.name}

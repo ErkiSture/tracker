@@ -10,7 +10,7 @@ export default function MetricManager() {
   const { themeColors } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { metrics, addMetric } = useMetrics();
+  const { activeMetrics, inactiveMetrics, addMetric } = useMetrics();
 
   const [newMetric, setNewMetric] = useState("");
 
@@ -33,9 +33,16 @@ export default function MetricManager() {
         onSubmit={handleAddMetric}
       />
 
+      <Text style={commonStyles.sectionTitle}>Active metrics</Text>
       <MetricList
-        metrics={metrics}
+        metrics={activeMetrics}
       />
+      
+      <Text style={commonStyles.sectionTitle}>Inactive metrics</Text>
+      <MetricList
+        metrics={inactiveMetrics}
+      />
+
     </View>
   );
 }

@@ -36,3 +36,7 @@ export async function removeMetric(id: number): Promise<void> {
     throw new Error("Metric doesn't exist");
   }
 }
+
+export async function toggleMetricStatus(id: number) {
+  await metricRepository.toggleMetricStatus(id);
+}

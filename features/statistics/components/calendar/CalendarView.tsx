@@ -20,22 +20,22 @@ export default function CalendarView() {
   const [selectedMonth, setSelectedMonth] = useState<number>(currentMonth);
   const [selectedMetric, setSelectedMetric] = useState<Metric | null>(null);
 
-  const { metrics } = useMetrics();
+  const { activeMetrics } = useMetrics();
 
   useEffect(() => {
-    if (metrics.length === 0) {
+    if (activeMetrics.length === 0) {
       setSelectedMetric(null);
       return;
     }
 
-    const selectedStillExists = metrics.some(
+    const selectedStillExists = activeMetrics.some(
       (metric) => metric.id === selectedMetric?.id
     );
 
     if (!selectedStillExists) {
-      setSelectedMetric(metrics[0]);
+      setSelectedMetric(activeMetrics[0]);
     }
-  }, [metrics]);
+  }, [activeMetrics]);
 
   function previousMonth() {
     if (selectedMonth === 1) {
@@ -68,7 +68,7 @@ export default function CalendarView() {
 
       <>
         <DropDownMenu
-          options={metrics}
+          options={activeMetrics}
           selected={selectedMetric}
           onSelect={setSelectedMetric}
         />

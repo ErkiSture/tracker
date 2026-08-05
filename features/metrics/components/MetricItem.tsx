@@ -17,7 +17,7 @@ export default function MetricItem({ metric, id }: Props) {
 
   const [ showConfirm, setShowConfirm ] = useState<boolean>(false);
 
-  const { removeMetric } = useMetrics()
+  const { removeMetric, toggleMetricStatus } = useMetrics()
 
   return (
     <View
@@ -32,10 +32,18 @@ export default function MetricItem({ metric, id }: Props) {
       <Text style={commonStyles.text}>
         {metric.name}
       </Text>
+      
+      <View style={{flexDirection: "row", gap: 22}}>
+        <Pressable onPress={() => setShowConfirm(true)}>
+          <Text style={styles.remove}>Remove</Text>
+        </Pressable>
 
-      <Pressable onPress={() => setShowConfirm(true)}>
-        <Text style={styles.remove}>Remove</Text>
-      </Pressable>
+        <Pressable onPress={() => {toggleMetricStatus(id)}}>
+          <Text style={commonStyles.text}>
+            {metric.status === 'active' ? 'Deactivate' : 'Activate'}
+          </Text>
+        </Pressable>
+      </View>
 
       <ConfirmModal
         visible={showConfirm}

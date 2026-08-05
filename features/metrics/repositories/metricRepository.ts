@@ -51,3 +51,24 @@ export async function getMetricCount(): Promise<number> {
 
   return result?.count ?? 0;
 }
+
+export async function toggleMetricStatus(id: number) {
+  const metric = await db.getFirstAsync<Metric>(
+    `
+    SELECT *
+    FROM metrics
+    WHERE id = ?
+    `,
+    [id]
+  );
+  
+  const newStatus = metric.status === 'active' ? 'inactive' : 'active';
+  await db.runAsync(
+    `
+    UPDATE metrics
+    SET status = ?
+    WHERE id = ?
+    `,
+    [newStatus, id]
+  );
+}

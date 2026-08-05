@@ -21,7 +21,7 @@ export default function DailyForm() {
 
   const { saveEntry } = useEntryActions();
   const entryAlreadyExistsForToday = useEntryExistsDate(date)
-  const { metrics } = useMetrics();
+  const { activeMetrics } = useMetrics();
   
   function handleSubmit() {
     saveEntry({values, comment, date});
@@ -29,14 +29,14 @@ export default function DailyForm() {
   
   // Default ratings to 5 
   useEffect(() => {
-    if (metrics.length === 0) return;
+    if (activeMetrics.length === 0) return;
 
     setValues(
       Object.fromEntries(
-        metrics.map(metric => [metric.id, 5])
+        activeMetrics.map(metric => [metric.id, 5])
       )
     );
-  }, [metrics])
+  }, [activeMetrics])
 
   function updateValue(metricId: number, value: number) {
     setValues(prev => ({
@@ -47,10 +47,10 @@ export default function DailyForm() {
 
   // Create rating row for each metric
   const ratingInputs = []
-  for (let i = 0; i < metrics.length; i++) {
+  for (let i = 0; i < activeMetrics.length; i++) {
 
-    const metricId = metrics[i].id
-    const metricName = metrics[i].name
+    const metricId = activeMetrics[i].id
+    const metricName = activeMetrics[i].name
     const value = values[metricId]
 
     ratingInputs.push(

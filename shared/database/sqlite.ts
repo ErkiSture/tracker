@@ -32,7 +32,8 @@ export default async function setUpDatabase() {
     
     CREATE TABLE IF NOT EXISTS metrics (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT UNIQUE NOT NULL 
+      name TEXT UNIQUE NOT NULL,
+      status TEXT NOT NULL DEFAULT 'active' 
     );
 
     CREATE TABLE IF NOT EXISTS entry_values (

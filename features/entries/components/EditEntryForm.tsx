@@ -18,13 +18,13 @@ export default function EditEntryForm({
   toggleEdit,
 }: Props) {
   const { updateEntry } = useEntryActions();
-  const { metrics } = useMetrics();
+  const { activeMetrics } = useMetrics();
 
   const [comment, setComment] = useState(entry.comment);
 
   const [values, setValues] = useState<Record<number, number>>(() =>
     Object.fromEntries(
-      metrics.map(metric => [
+      activeMetrics.map(metric => [
         metric.id,
         entry.metrics[metric.id]?.value ?? 5,
       ])

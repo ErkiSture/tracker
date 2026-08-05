@@ -8,11 +8,11 @@ export default function DailyEntryScreen() {
   const { themeColors, changeTheme } = useTheme();
   const commonStyles = createCommonStyles(themeColors);
 
-  const { metrics } = useMetrics();
+  const { activeMetrics } = useMetrics();
   
   return (
     <>
-      {metrics.length > 0 ? (
+      {activeMetrics.length > 0 ? (
         <>
           <DailyForm></DailyForm>
           <DevButtons></DevButtons>
