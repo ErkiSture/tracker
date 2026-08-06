@@ -34,7 +34,7 @@ const createEntry: CreateEntry = {
   values: {
     1: 8,
   },
-};
+}; 
 
 const entry: Entry = {
   id: 1,

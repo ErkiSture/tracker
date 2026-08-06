@@ -1,9 +1,9 @@
+import useMetricActions from "@/features/metrics/hooks/useMetricActions";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { useMetrics } from "../contexts/metricContext";
-import useMetricActions from "../hooks/useMetricActions";
 import AddMetricForm from "./AddMetricForm";
 import MetricList from "./MetricList";
 
@@ -52,9 +52,3 @@ export default function MetricManager() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    gap: 20,
-  },
-});

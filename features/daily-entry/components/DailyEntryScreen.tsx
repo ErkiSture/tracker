@@ -21,10 +21,6 @@ export default function DailyEntryScreen() {
         <>
         <DailyForm></DailyForm>
         <DevButtons></DevButtons>
-
-        {/* <View style={commonStyles.center}>
-          <Text style={commonStyles.text}>Please add a metric</Text>
-        </View> */}
         </>
       )
     }

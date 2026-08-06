@@ -12,7 +12,6 @@ export default function MetricList({ metrics }: Props) {
       {metrics.map((metric) => (
         <MetricItem
           key={metric.id}
-          id={metric.id}
           metric={metric}
         />
       ))}
