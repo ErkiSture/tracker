@@ -2,7 +2,7 @@ import useEntryActions from "@/features/entries/hooks/useEntryActions";
 import { useMetrics } from "@/features/metrics/contexts/metricContext";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import getCurrentDateFormatted from "@/shared/util/getCurrentDateFormatted";
+import getCurrentDateFormatted from "@/shared/utils/getTodayDate";
 import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import useEntryExistsDate from "../hooks/useEntryExistsToday";

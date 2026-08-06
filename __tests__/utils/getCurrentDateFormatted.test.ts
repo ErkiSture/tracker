@@ -1,4 +1,4 @@
-import getCurrentDateFormatted from "@/shared/util/getCurrentDateFormatted";
+import getCurrentDateFormatted from "@/shared/utils/getTodayDate";
 
 describe("getCurrentDateFormatted", () => {
   it("returns today's date in YYYY-MM-DD format", () => {

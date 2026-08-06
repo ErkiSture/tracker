@@ -11,7 +11,7 @@ describe("ThemeContext", () => {
     jest.clearAllMocks();
   });
 
-  it("starts with systemthemePreference", async () => {
+  it("starts with system themePreference", async () => {
     const { result } = await renderHook(() => useTheme(), {
       wrapper: ThemeProvider,
     });
@@ -31,7 +31,7 @@ describe("ThemeContext", () => {
     expect(result.current.themePreference).toBe("dark");
   });
 
-  it("saves themethemePreference to AsyncStorage", async () => {
+  it("saves themePreference to AsyncStorage", async () => {
     const { result } = await renderHook(() => useTheme(), {
       wrapper: ThemeProvider,
     });
@@ -43,7 +43,7 @@ describe("ThemeContext", () => {
     expect(AsyncStorage.setItem).toHaveBeenCalledWith("theme", "dark");
   })
 
-  it("loads themethemePreference from AsyncStorage", async () => {
+  it("loads themePreference from AsyncStorage", async () => {
     AsyncStorage.getItem = jest.fn().mockResolvedValue("dark")
 
     const { result } = await renderHook(() => useTheme(), {
@@ -53,7 +53,7 @@ describe("ThemeContext", () => {
     expect(result.current.themePreference).toBe("dark");
   })
 
-  it("falls back to systemthemePreference if AsyncStorage is empty", async () => {
+  it("falls back to system themePreference if AsyncStorage is empty", async () => {
     AsyncStorage.getItem = jest.fn().mockResolvedValue(null)
 
     const { result } = await renderHook(() => useTheme(), {

@@ -1,4 +1,5 @@
-export function getMonthDateRange(year: number, month: number) {
+// Get the start and end date of a given month in YYYY-MM-DD format
+export function getMonthRange(year: number, month: number): { start: string; end: string } {
   const start = `${year}-${String(month).padStart(2, "0")}-01`;
 
   const nextMonth = month === 12 ? 1 : month + 1;

@@ -1,5 +1,5 @@
 import setUpDatabase, { db } from "@/shared/database/sqlite";
-import { getMonthDateRange } from "../../../shared/util/getMonthDateRange";
+import { getMonthRange } from "@/shared/utils/getMonthRange";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 import { mapRowsToEntries } from "../utils/mapRowsToEntries";
@@ -90,7 +90,7 @@ export async function updateEntry(id: number, entry: CreateEntry): Promise<Entry
 
 
 export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
-  const { start, end } = getMonthDateRange(year, month);
+  const { start, end } = getMonthRange(year, month);
   
   const result = await db.getAllAsync<EntryRow>(
     `

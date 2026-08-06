@@ -2,11 +2,12 @@ import { Entry } from "@/features/entries/types/entry";
 import { Metric } from "@/features/metrics/types/metric";
 import { useTheme } from "@/shared/contexts/themeContext";
 import { createCommonStyles } from "@/shared/styles/common";
-import getDateFormatted from "@/shared/util/getDateFormatted";
+import getDateFormatted from "@/shared/utils/formatDate";
 import { useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import useMonthEntries from "../../hooks/useMonthEntries";
-import { getDaysInMonth, mapEntriesByDay } from "../../utils/calendar";
+import { getDaysInMonth } from "../../utils/getDaysInMonth";
+import { mapEntriesByDay } from "../../utils/mapEntriesByDay";
 import CalendarGridCell from "./CalendarGridCell";
 import DetailsModal from "./detailsModal/DetailsModal";
 

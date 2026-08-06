@@ -1,4 +1,5 @@
-export default function getDateFormatted(
+// Format separate date parts into YYYY-MM-DD format
+export default function formatDate(
   year: number,
   month: number,
   day: number

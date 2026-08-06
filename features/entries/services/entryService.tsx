@@ -1,4 +1,4 @@
-import * as entryRepository from "../repositories/entryRepository";
+import * as entryRepository from "@/features/entries/repositories/entryRepository";
 import { CreateEntry } from "../types/createEntry";
 import { Entry } from "../types/entry";
 
@@ -41,7 +41,24 @@ export async function removeEntry(id: number): Promise<void> {
 }
 
 export async function updateEntry(id: number, entry: CreateEntry): Promise<Entry> {
-  return await entryRepository.updateEntry(id, entry);
+  for (const value of Object.values(entry.values)){
+    if (value < 1 || value > 10) {
+      throw new Error("Ratings must be between 1 and 10");
+    }
+  }
+
+  const comment = (entry.comment ?? "").trim();
+
+  if (comment.length > 500) {
+    throw new Error("Comment must be less than 500 characters");
+  }
+
+  const entryToUpdate = {
+    ...entry,
+    comment,
+  };
+
+  return await entryRepository.updateEntry(id, entryToUpdate);
 }
 
 export async function getMonthEntries(year: number, month: number): Promise<Entry[]> {
